@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "655787078303",
+    "project_id": "chatherd-62839",
+    "storage_bucket": "chatherd-62839.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655787078303:android:22afbf0b6c4e18cc9be8aa",
+        "android_client_info": {
+          "package_name": "com.example.chat_herd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "655787078303-a71g8gqv7if0u8lp49hibi3qo2lthcc1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chat_herd",
+            "certificate_hash": "533785e2869f795372f082fc26ad262fe5b6a89b"
+          }
+        },
+        {
+          "client_id": "655787078303-ea11jd8b35ss07cnkbio9or1u1tv351h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8oBqXP4SIWsexv4akdThGs8FklLHLJdk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "655787078303-ea11jd8b35ss07cnkbio9or1u1tv351h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "655787078303-p7vqr7t6l1icpbquetibo919ut55cl30.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.chatHerd"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655787078303:android:5e81f0b44cbf9d3f9be8aa",
+        "android_client_info": {
+          "package_name": "com.example.chat_herd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "655787078303-ckeila32g5fu604toi7hmqnheor9olrr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chat_herd",
+            "certificate_hash": "533785e2869f795372f082fc26ad262fe5b6a89b"
+          }
+        },
+        {
+          "client_id": "655787078303-ea11jd8b35ss07cnkbio9or1u1tv351h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8oBqXP4SIWsexv4akdThGs8FklLHLJdk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "655787078303-ea11jd8b35ss07cnkbio9or1u1tv351h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "655787078303-p7vqr7t6l1icpbquetibo919ut55cl30.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.chatHerd"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
