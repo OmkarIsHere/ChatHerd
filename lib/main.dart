@@ -1,3 +1,4 @@
+import 'package:chat_herd/helper/helper_function.dart';
 import 'package:chat_herd/pages/home_page.dart';
 import 'package:chat_herd/pages/onboarding_page.dart';
 import 'package:chat_herd/shared/constants.dart';
@@ -8,28 +9,52 @@ import 'package:flutter/foundation.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if(kIsWeb){ //firebase initialization for web
+  if(kIsWeb){
     await Firebase.initializeApp(
         options: FirebaseOptions(
             apiKey: Constants.apiKey,
             appId: Constants.appId,
             messagingSenderId: Constants.messagingSenderID,
             projectId: Constants.projectId));
-  }else{ //firebase initialization for android/ios
+  }else{
     await Firebase.initializeApp();
   }
 
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: OnBoarding(),
-    );
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool _signedIn=false;
+
+  @override
+  void initState() {
+    super.initState();
+    getUserLoggedInStatus();
   }
+
+  getUserLoggedInStatus() {
+    HelperFunction.getUserLoggedInState().then((value) => {
+      if(value != null){
+        setState((){
+        _signedIn = value;
+        })
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: _signedIn ? HomePage(): const OnBoarding(),
+    );
+      }
 }

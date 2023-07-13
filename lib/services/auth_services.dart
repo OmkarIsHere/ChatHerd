@@ -1,3 +1,4 @@
+import 'package:chat_herd/helper/helper_function.dart';
 import 'package:chat_herd/services/database_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -10,7 +11,7 @@ class AuthServices{
       User user = (await firebaseAuth.createUserWithEmailAndPassword(email: email, password: password)).user!;
 
       if(user != null){
-        await DatabaseServices(uid: user.uid).updateUserData(fullName, email);
+        await DatabaseServices(uid: user.uid).saveUserData(fullName, email);
         return true;
       }
 
@@ -18,4 +19,30 @@ class AuthServices{
       return e.message;
     }
   }
+
+  Future loginUserWithEmailAndPassword
+      (String email, String password ) async{
+    try{
+      User user = (await firebaseAuth.signInWithEmailAndPassword(email: email, password: password)).user!;
+
+      if(user != null){
+        return true;
+      }
+
+    }on FirebaseAuthException catch(e){
+      return e.message;
+    }
+  }
+
+  Future signOut() async{
+    try{
+      await HelperFunction.saveUserLoginStatus(false);
+      await HelperFunction.saveUserNameSF('');
+      await HelperFunction.saveUserEmailSF('');
+      firebaseAuth.signOut();
+    }catch(e){
+      return null;
+    }
+  }
+
 }

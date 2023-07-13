@@ -1,7 +1,14 @@
 import 'package:chat_herd/pages/auth/signup_page.dart';
+import 'package:chat_herd/services/auth_services.dart';
+import 'package:chat_herd/services/database_services.dart';
 import 'package:chat_herd/shared/constants.dart';
 import 'package:chat_herd/widgets/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../helper/helper_function.dart';
+import '../home_page.dart';
 
 class LoginInPage extends StatefulWidget {
   const LoginInPage({super.key});
@@ -14,14 +21,17 @@ class _LoginInPageState extends State<LoginInPage> {
   bool _passwordVisiblity = false;
   String? email = "";
   String? password = "";
+  bool _isLoading = false;
+  AuthServices authServices = AuthServices();
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constants.whiteColor,
-      body: SingleChildScrollView(
+      body:_isLoading? Center(
+          child: CircularProgressIndicator(color: Constants.primaryLightColor)) : SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1, vertical: 30),
+          padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1, vertical: 60),
           child: Form(
             key: formKey,
               child: Center(
@@ -84,11 +94,11 @@ class _LoginInPageState extends State<LoginInPage> {
                     const SizedBox(height: 25,),
                     TextButton(
                       onPressed: () {
-                        if(formKey.currentState!.validate()){}
+                        login();
                       },
                       child: Container(
                         height: 45,
-                        width: MediaQuery.of(context).size.width * 0.95,
+                        width: MediaQuery.of(context).size.width * double.infinity ,
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         decoration: BoxDecoration(
                           color: Constants.primaryLightColor,
@@ -138,5 +148,32 @@ class _LoginInPageState extends State<LoginInPage> {
         ),
       ),
     );
+  }
+  login()async{
+    if(formKey.currentState!.validate()){
+      setState(() {
+        _isLoading = true;
+      });
+      await authServices.loginUserWithEmailAndPassword(email!, password!)
+          .then((value) async{
+        if(value == true){
+          nextPageReplacement(context, HomePage());
+        QuerySnapshot snapshot = await DatabaseServices(uid: FirebaseAuth.instance.currentUser!.uid).getUserData(email!);
+          await HelperFunction.saveUserLoginStatus(true);
+          await HelperFunction.saveUserEmailSF(email!);
+          await HelperFunction.saveUserNameSF(snapshot.docs[0]['fullName']);
+
+
+          // setState(() {
+          //   _isLoading = false;
+          // });
+        }else{
+          showSnackBar(context, Constants.redColor, value, 10);
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      });
+    }
   }
 }

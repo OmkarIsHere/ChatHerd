@@ -1,3 +1,4 @@
+// import 'package:chat_herd/helper/helper_function.dart';
 import 'package:chat_herd/pages/auth/login_page.dart';
 import 'package:chat_herd/services/auth_services.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class _SignUpPageState extends State<SignUpPage> {
           child: CircularProgressIndicator(color: Constants.primaryLightColor)) :SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.1, vertical: 30),
+            horizontal: MediaQuery.of(context).size.width * 0.1, vertical: 60),
         child: Form(
           key: formKey,
           child: Column(
@@ -148,7 +149,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 },
                 child: Container(
                   height: 45,
-                  width: MediaQuery.of(context).size.width * 0.95,
+                  width: MediaQuery.of(context).size.width * double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   decoration: BoxDecoration(
                     color: Constants.primaryLightColor,
@@ -203,13 +204,17 @@ class _SignUpPageState extends State<SignUpPage> {
         _isLoading = true;
       });
       await authServices.registerUserWithEmailAndPassword(fullName!, email!, password!)
-      .then((value) {
+      .then((value){
         if(value == true){
-          showSnackBar(context, Color(0xff0ab107), 'Account Signed Up Successfully',2);
-          setState(() {
-            _isLoading = false;
-          });
+          // HelperFunction.saveUserLoginStatus(true);
+          // HelperFunction.saveUserNameSF(fullName!);
+          // HelperFunction.saveUserEmailSF(email!);
+          showSnackBar(context, const Color(0xff0ab107), 'Account Signed Up Successfully',2);
           nextPageReplacement(context, const LoginInPage());
+
+          // setState(() {
+          //   _isLoading = false;
+          // });
         }else{
           showSnackBar(context, Constants.redColor, value, 10);
           setState(() {

@@ -1,6 +1,4 @@
-import 'package:chat_herd/helper/helper_function.dart';
 import 'package:chat_herd/pages/auth/login_page.dart';
-import 'package:chat_herd/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -15,19 +13,19 @@ class OnBoarding extends StatefulWidget {
 }
 
 class _OnBoardingState extends State<OnBoarding> {
-  bool _isSignedIn = false;
-  @override
-  void initState() {
-    super.initState();
-    getUserLoggedInState();
-  }
-  void getUserLoggedInState() async{
-    await HelperFunction.getUserLoggedInState().then((value) {
-      if(value!=null){
-        _isSignedIn = value;
-      }
-    });
-  }
+  // bool _isSignedIn = false;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getUserLoggedInState();
+  // }
+  // void getUserLoggedInState() async{
+  //   await HelperFunction.getUserLoggedInState().then((value) {
+  //     if(value!=null){
+  //       _isSignedIn = value;
+  //     }
+  //   });
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +72,8 @@ class _OnBoardingState extends State<OnBoarding> {
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                   TextButton(
-                    onPressed: () => _isSignedIn ? nextPageReplacement(context,const HomePage()) : nextPageReplacement(context,const LoginInPage()),//() {
+                    onPressed: () => nextPageReplacement(context,const LoginInPage()),
+                    //() {
                     //   Navigator.pushReplacement(
                     //       context,
                     //       MaterialPageRoute(builder: (context) => _isSignedIn? const HomePage():const LoginInPage()));

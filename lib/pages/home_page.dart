@@ -1,16 +1,18 @@
+import 'package:chat_herd/services/auth_services.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
+  HomePage({super.key});
+  AuthServices authServices = AuthServices();
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child:Text(
-          'Home',
+        child:ElevatedButton(
+          onPressed: () => authServices.signOut(),
+          child: Text('SignOut'),
         ),
-      ),
+        ),
     );
   }
 }
