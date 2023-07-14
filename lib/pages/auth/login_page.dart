@@ -158,7 +158,7 @@ class _LoginInPageState extends State<LoginInPage> {
           .then((value) async{
         if(value == true){
           nextPageReplacement(context, HomePage());
-        QuerySnapshot snapshot = await DatabaseServices(uid: FirebaseAuth.instance.currentUser!.uid).getUserData(email!);
+          QuerySnapshot snapshot = await DatabaseServices(uid: FirebaseAuth.instance.currentUser!.uid).getUserData(email!);
           await HelperFunction.saveUserLoginStatus(true);
           await HelperFunction.saveUserEmailSF(email!);
           await HelperFunction.saveUserNameSF(snapshot.docs[0]['fullName']);
