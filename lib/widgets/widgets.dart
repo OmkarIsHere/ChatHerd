@@ -46,11 +46,11 @@ void showSnackBar(context, color, message, time){
         content: Text(message,style: TextStyle(fontSize: 14, color: Constants.whiteColor),),
         backgroundColor: color,
     duration:Duration(seconds: time),
-    action: SnackBarAction(label: 'Ok',textColor: Constants.whiteColor ,onPressed: (){}),
+    action: SnackBarAction(label: 'Ok',textColor: color, backgroundColor: Constants.whiteColor, onPressed: (){}),
     ),
   );
 
-  void chatCard(String? name,String? lastSeen, bool isImage,[image]){
+void chatCard(String? name,String? lastSeen, bool isImage,[image]){
     Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: Container(
@@ -114,6 +114,6 @@ void showSnackBar(context, color, message, time){
         ),
       ),
     );
-  }
+}
 
 }

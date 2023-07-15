@@ -157,11 +157,12 @@ class _LoginInPageState extends State<LoginInPage> {
       await authServices.loginUserWithEmailAndPassword(email!, password!)
           .then((value) async{
         if(value == true){
-          nextPageReplacement(context, HomePage());
+
           QuerySnapshot snapshot = await DatabaseServices(uid: FirebaseAuth.instance.currentUser!.uid).getUserData(email!);
-          await HelperFunction.saveUserLoginStatus(true);
-          await HelperFunction.saveUserEmailSF(email!);
-          await HelperFunction.saveUserNameSF(snapshot.docs[0]['fullName']);
+          HelperFunction.saveUserLoginStatus(true);
+          HelperFunction.saveUserEmailSF(email!);
+          HelperFunction.saveUserNameSF(snapshot.docs[0]['fullName']);
+          nextPageReplacement(context, HomePage());
 
 
           // setState(() {
