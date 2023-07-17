@@ -14,5 +14,6 @@ class Constants {
   static Color greyColor = const Color(0xFFA4A4A4);
   static Color redColor = const Color(0xFFE00606);
   static Color primaryBackgroundColor = const Color(0xFFD2D5F9);
+  static Color dividerColor = const Color(0xFFEDEDED);
 
 }

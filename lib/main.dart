@@ -9,14 +9,14 @@ import 'package:flutter/foundation.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if(kIsWeb){
+  if (kIsWeb) {
     await Firebase.initializeApp(
         options: FirebaseOptions(
             apiKey: Constants.apiKey,
             appId: Constants.appId,
             messagingSenderId: Constants.messagingSenderID,
             projectId: Constants.projectId));
-  }else{
+  } else {
     await Firebase.initializeApp();
   }
 
@@ -24,7 +24,6 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-
   const MyApp({super.key});
 
   @override
@@ -32,7 +31,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool _signedIn=false;
+  bool _signedIn = false;
 
   @override
   void initState() {
@@ -42,19 +41,20 @@ class _MyAppState extends State<MyApp> {
 
   getUserLoggedInStatus() {
     HelperFunction.getUserLoggedInState().then((value) => {
-      if(value != null){
-        setState((){
-        _signedIn = value;
-        })
-      }
-    });
+          if (value != null)
+            {
+              setState(() {
+                _signedIn = value;
+              })
+            }
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: _signedIn ? HomePage(): const OnBoarding(),
+      home: _signedIn ? const HomePage() : const OnBoarding(),
     );
-      }
+  }
 }

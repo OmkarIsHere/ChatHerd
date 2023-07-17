@@ -10,10 +10,8 @@ class AuthServices{
     try{
       User user = (await firebaseAuth.createUserWithEmailAndPassword(email: email, password: password)).user!;
 
-      if(user != null){
-        await DatabaseServices(uid: user.uid).saveUserData(fullName, email);
-        return true;
-      }
+      await DatabaseServices(uid: user.uid).saveUserData(fullName, email);
+      return true;
 
     }on FirebaseAuthException catch(e){
       return e.message;
@@ -23,10 +21,16 @@ class AuthServices{
   Future loginUserWithEmailAndPassword
       (String email, String password ) async{
     try{
-      User user = (await firebaseAuth.signInWithEmailAndPassword(email: email, password: password)).user!;
+      UserCredential userCredential = await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);//).user!;
+      String idToken = await userCredential.user!.getIdToken();
 
-      if(user != null){
+
+      if(idToken.isNotEmpty){
+        // print('login true');
         return true;
+      }else{
+        // print('login false');
+        return false;
       }
 
     }on FirebaseAuthException catch(e){
