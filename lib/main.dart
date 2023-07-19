@@ -1,5 +1,6 @@
 import 'package:chat_herd/helper/helper_function.dart';
 import 'package:chat_herd/pages/home_page.dart';
+import 'package:chat_herd/pages/main_page.dart';
 import 'package:chat_herd/pages/onboarding_page.dart';
 import 'package:chat_herd/shared/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -54,7 +55,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: _signedIn ? const HomePage() : const OnBoarding(),
+      home: _signedIn ? const MainPage() : const OnBoarding(),
     );
   }
 }

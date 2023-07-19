@@ -49,6 +49,7 @@ class _MorePageState extends State<MorePage> {
               style: TextStyle(
                 color: Constants.blackColor,
                 fontSize: 16,
+                fontFamily: 'Mulish-Reg',
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -58,6 +59,7 @@ class _MorePageState extends State<MorePage> {
               style: TextStyle(
                 color: Constants.blackColor,
                 fontSize: 14,
+                fontFamily: 'Mulish-Reg',
               ),
             ),
             actionsPadding:const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -65,6 +67,7 @@ class _MorePageState extends State<MorePage> {
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 style: ElevatedButton.styleFrom(
+                  elevation: 0,
                   backgroundColor: Constants.greyColor,
                   side:const BorderSide(width:50),
                   shape:RoundedRectangleBorder(
@@ -76,11 +79,13 @@ class _MorePageState extends State<MorePage> {
                   style: TextStyle(
                     color: Constants.whiteColor,
                     fontSize: 14,
+                    fontFamily: 'Mulish-Reg',
                   ),
                 ), ),
               ElevatedButton(
                   onPressed: ()=>signOut(),
                   style: ElevatedButton.styleFrom(
+                    elevation: 0,
                     backgroundColor: Constants.redColor,
                     side:const BorderSide(width:50),
                     shape:RoundedRectangleBorder(
@@ -92,6 +97,8 @@ class _MorePageState extends State<MorePage> {
                     style: TextStyle(
                       color: Constants.whiteColor,
                       fontSize: 14,
+                      fontFamily: 'Mulish-Reg',
+                      fontWeight: FontWeight.w400,
                     ),
                   ), ),
             ],

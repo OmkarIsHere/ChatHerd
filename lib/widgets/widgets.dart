@@ -66,7 +66,7 @@ void chatCard(String? name,String? lastSeen, bool isImage,[image]){
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Image.asset(
-                        'assets/images/no-image.png',
+                        'assets/images/user.png',
                         fit: BoxFit.cover,
                       ),
                     ),

@@ -1,5 +1,5 @@
 import 'package:chat_herd/helper/helper_function.dart';
-import 'package:chat_herd/pages/more_page.dart';
+import 'package:chat_herd/pages/search_page.dart';
 import 'package:chat_herd/services/database_services.dart';
 import 'package:chat_herd/widgets/group_card.dart';
 import 'package:chat_herd/widgets/widgets.dart';
@@ -28,11 +28,12 @@ class _HomePageState extends State<HomePage> {
     getUserData();
   }
 
-  String getId(String str){
+  String getId(String str) {
     return str.substring(0, str.indexOf("_"));
   }
-  String getName(String str){
-    return str.substring(str.indexOf("_")+1);
+
+  String getName(String str) {
+    return str.substring(str.indexOf("_") + 1);
   }
 
   getUserData() async {
@@ -48,10 +49,8 @@ class _HomePageState extends State<HomePage> {
         userName = value;
       });
     });
-
   }
 
-  // AuthServices authServices = AuthServices();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -87,23 +86,30 @@ class _HomePageState extends State<HomePage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 child: InkWell(
-                  onTap: (){
-                    nextPage(context, MorePage());
+                  onTap: () {
+                    nextPage(context, const SearchPage());
                   },
                   child: Container(
                     width: double.maxFinite,
                     height: 36,
-                    color: Constants.offWhiteColor,
-                    child: const Text('hello'),
+                    decoration: BoxDecoration(
+                      color: Constants.offWhiteColor,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Icon(
+                          Icons.search_rounded,
+                          color: Constants.hintColor,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
               groupList(),
-              // ListView.builder(
-              //     shrinkWrap: true,
-              //     physics: const ClampingScrollPhysics(),
-              //     itemCount: 20,
-              //     itemBuilder: (context, index) => chatCard()),
             ],
           ),
         ),
@@ -119,12 +125,14 @@ class _HomePageState extends State<HomePage> {
             if (snapshot.data['groups'] != null) {
               if (snapshot.data['groups'].length != 0) {
                 return ListView.builder(
-                  shrinkWrap: true,
+                    shrinkWrap: true,
                     physics: const ClampingScrollPhysics(),
                     itemCount: snapshot.data['groups'].length,
-                    itemBuilder: (context, index){
-                  return GroupCard(groupName: getName(snapshot.data['groups'][index]), groupIcon: 'Hello');
-                });
+                    itemBuilder: (context, index) {
+                      return GroupCard(
+                          groupName: getName(snapshot.data['groups'][index]),
+                          groupIcon: 'Hello');
+                    });
               } else {
                 return noGroupWidget();
               }
@@ -167,7 +175,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
 
   popUpDialog(BuildContext context) {
     showDialog(
@@ -217,7 +224,7 @@ class _HomePageState extends State<HomePage> {
                       maxLength: 30,
                       onChanged: (value) {
                         setState(() {
-                          groupName = value;
+                          groupName = value.trim();
                         });
                       },
                       decoration: textInputDecoration.copyWith(
@@ -269,8 +276,11 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _isLoading = true;
       });
-      DatabaseServices(uid: FirebaseAuth.instance.currentUser!.uid).createGroup(userName!,FirebaseAuth.instance.currentUser!.uid, groupName!).whenComplete(() {
-        _isLoading =false;
+      DatabaseServices(uid: FirebaseAuth.instance.currentUser!.uid)
+          .createGroup(
+              userName!, FirebaseAuth.instance.currentUser!.uid, groupName!)
+          .whenComplete(() {
+        _isLoading = false;
       });
       Navigator.of(context).pop();
       showSnackBar(context, Colors.green, 'Group created Successfully', 3);

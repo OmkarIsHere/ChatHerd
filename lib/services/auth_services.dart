@@ -21,15 +21,15 @@ class AuthServices{
   Future loginUserWithEmailAndPassword
       (String email, String password ) async{
     try{
+
       UserCredential userCredential = await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);//).user!;
       String idToken = await userCredential.user!.getIdToken();
 
-
       if(idToken.isNotEmpty){
-        // print('login true');
+        print('login true');
         return true;
       }else{
-        // print('login false');
+        print('login false');
         return false;
       }
 

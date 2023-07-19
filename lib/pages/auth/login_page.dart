@@ -19,8 +19,8 @@ class LoginInPage extends StatefulWidget {
 
 class _LoginInPageState extends State<LoginInPage> {
   bool _passwordVisiblity = false;
-  String? email = "";
-  String? password = "";
+  String email = "";
+  String password = "";
   bool _isLoading = false;
   AuthServices authServices = AuthServices();
   final formKey = GlobalKey<FormState>();
@@ -53,7 +53,7 @@ class _LoginInPageState extends State<LoginInPage> {
                       keyboardType: TextInputType.emailAddress,
                       onChanged: (value){
                         setState(() {
-                          email = value;
+                          email = value.trim();
                         });
                       },
                       validator: (value){
@@ -71,7 +71,7 @@ class _LoginInPageState extends State<LoginInPage> {
                       obscureText: !_passwordVisiblity,
                       onChanged: (value){
                         setState(() {
-                          password = value;
+                          password = value.trim();
                         });
                       },
                       validator: (value){
@@ -154,15 +154,16 @@ class _LoginInPageState extends State<LoginInPage> {
       setState(() {
         _isLoading = true;
       });
-      await authServices.loginUserWithEmailAndPassword(email!, password!)
+      print('email-$email, password-$password');
+      await authServices.loginUserWithEmailAndPassword(email, password)
           .then((value) async{
         if(value == true){
-
-          QuerySnapshot snapshot = await DatabaseServices(uid: FirebaseAuth.instance.currentUser!.uid).getUserData(email!);
+          QuerySnapshot snapshot = await DatabaseServices(uid: FirebaseAuth.instance.currentUser!.uid).getUserData(email);
           HelperFunction.saveUserLoginStatus(true);
-          HelperFunction.saveUserEmailSF(email!);
+          HelperFunction.saveUserEmailSF(email);
           HelperFunction.saveUserNameSF(snapshot.docs[0]['fullName']);
-          nextPageReplacement(context, HomePage());
+          if(!mounted) return;
+          nextPageReplacement(context, const HomePage());
 
 
           // setState(() {

@@ -73,11 +73,6 @@ class _OnBoardingState extends State<OnBoarding> {
                   SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                   TextButton(
                     onPressed: () => nextPageReplacement(context,const LoginInPage()),
-                    //() {
-                    //   Navigator.pushReplacement(
-                    //       context,
-                    //       MaterialPageRoute(builder: (context) => _isSignedIn? const HomePage():const LoginInPage()));
-                    // },
                     child: Container(
                       height: 45,
                       width: MediaQuery.of(context).size.width * 0.9,
