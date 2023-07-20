@@ -4,9 +4,9 @@ import 'package:chat_herd/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class GroupCard extends StatefulWidget {
-  final String groupName, groupIcon;
+  final String groupName, groupIcon, groupId, userName;
   const GroupCard(
-      {required this.groupName, required this.groupIcon, super.key});
+      {required this.groupName, required this.groupIcon, super.key, required this.groupId, required this.userName});
 
   @override
   State<GroupCard> createState() => _GroupCardState();
@@ -20,11 +20,11 @@ class _GroupCardState extends State<GroupCard> {
       child: Column(
         children: <Widget>[
           InkWell(
-            onTap: ()=>nextPage(context, ChatPage(groupName:widget.groupName,)),
+            onTap: ()=>nextPage(context, ChatPage(groupName:widget.groupName,groupId: widget.groupId,userName: widget.userName, groupIcon: widget.groupIcon)),
             child: Row(
               children: <Widget>[
                    CircleAvatar(
-                    radius: 24,
+                    radius: 20,
                     backgroundColor: Constants.dividerColor,
                     child: Image.asset(
                       'assets/images/user-group.png',

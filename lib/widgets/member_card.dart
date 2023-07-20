@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import '../shared/constants.dart';
 
 class MemberCard extends StatefulWidget {
-  const MemberCard({super.key});
+  final String memberName;
+  final String adminName;
+  const MemberCard({super.key, required this.memberName, required this.adminName});
 
   @override
   State<MemberCard> createState() => _MemberCardState();
 }
 
 class _MemberCardState extends State<MemberCard> {
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -25,7 +28,7 @@ class _MemberCardState extends State<MemberCard> {
         ),
       ),
       title: Text(
-        'John cena',
+        getName(widget.memberName),
         textAlign: TextAlign.start,
         maxLines: 1,
         style: TextStyle(
@@ -37,7 +40,7 @@ class _MemberCardState extends State<MemberCard> {
         ),
       ),
       subtitle:  Text(
-        'omkar@gmail.com',
+        'example@email.com',
         textAlign: TextAlign.start,
         maxLines: 1,
         style: TextStyle(
@@ -48,7 +51,8 @@ class _MemberCardState extends State<MemberCard> {
           color: Constants.greyColor,
         ),
       ),
-      trailing: Container(
+      trailing:(widget.adminName == widget.memberName)
+          ?Container(
         decoration: BoxDecoration(
         color: Constants.offWhiteColor,
           borderRadius: BorderRadius.circular(5)
@@ -67,7 +71,10 @@ class _MemberCardState extends State<MemberCard> {
             ),
           ),
         ),
-      ),
+      )
+      :const SizedBox(),
     );
   }
+  // String getId(String str) => str.substring(0, str.indexOf("_"));
+  String getName(String str) => str.substring(str.indexOf("_") + 1);
 }

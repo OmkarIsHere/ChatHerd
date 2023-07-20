@@ -131,7 +131,9 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       return GroupCard(
                           groupName: getName(snapshot.data['groups'][index]),
-                          groupIcon: 'Hello');
+                          groupIcon: '',
+                          groupId: getId(snapshot.data['groups'][index]),
+                          userName: userName ?? 'null');
                     });
               } else {
                 return noGroupWidget();
@@ -162,7 +164,7 @@ class _HomePageState extends State<HomePage> {
             child: Image.asset('assets/images/empty_email.webp'),
           ),
           Text(
-            'Click on the add button to create group',
+            'Create your own herd or join the existed herds',
             textAlign: TextAlign.center,
             style: TextStyle(
               overflow: TextOverflow.ellipsis,
@@ -182,7 +184,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context) {
           return StatefulBuilder(builder: ((context, setState) {
             return AlertDialog(
-              title: const Text('Create a group', textAlign: TextAlign.center),
+              title: const Text('Create a herd', textAlign: TextAlign.center),
               backgroundColor: Constants.whiteColor,
               content: Form(
                 key: formKey,
@@ -228,7 +230,7 @@ class _HomePageState extends State<HomePage> {
                         });
                       },
                       decoration: textInputDecoration.copyWith(
-                        labelText: 'Group Name',
+                        labelText: 'Herd Name',
                         prefixIcon: Icon(
                           Icons.groups,
                           color: Constants.hintColor,
@@ -237,7 +239,7 @@ class _HomePageState extends State<HomePage> {
                       validator: (value) {
                         return (value != "")
                             ? null
-                            : "Please enter a group Name";
+                            : "Please enter a herd name";
                       },
                     ),
                     const SizedBox(height: 6),
@@ -253,7 +255,7 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: Text(
-                          'Create Group',
+                          'Create Herd',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Constants.whiteColor,
@@ -283,7 +285,7 @@ class _HomePageState extends State<HomePage> {
         _isLoading = false;
       });
       Navigator.of(context).pop();
-      showSnackBar(context, Colors.green, 'Group created Successfully', 3);
+      showSnackBar(context, Colors.green, 'Herd created Successfully', 3);
     }
   }
 }

@@ -116,7 +116,7 @@ class _MorePageState extends State<MorePage> {
             children: <Widget>[
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    const EdgeInsets.only(left: 22, top: 15, bottom: 12),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -125,7 +125,8 @@ class _MorePageState extends State<MorePage> {
                     style: TextStyle(
                       color: Constants.blackColor,
                       fontSize: 18,
-                      fontWeight: FontWeight.w700,
+                      height: 1.5,
+                      fontWeight: FontWeight.w600,
                       fontFamily: 'Mulish-Reg',
                     ),
                   ),

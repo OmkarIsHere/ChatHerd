@@ -1,26 +1,47 @@
 import 'package:chat_herd/pages/group_info.dart';
+import 'package:chat_herd/services/database_services.dart';
 import 'package:chat_herd/widgets/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../shared/constants.dart';
 
 class ChatPage extends StatefulWidget {
+  final String groupId;
   final String groupName;
-  const ChatPage({super.key, required this.groupName});
+  final String userName;
+  final String groupIcon;
+  const ChatPage({super.key, required this.groupName, required this.groupId, required this.userName, required this.groupIcon});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
+  Stream<QuerySnapshot>?chats;
   String message ="";
+  String admin ="";
+  @override
+  void initState() {
+    super.initState();
+  getChatAndAdmin();
+  }
+  getChatAndAdmin(){
+    DatabaseServices().getChats(widget.groupId).then((value){
+      setState(() => chats=value);
+    });
+    DatabaseServices().getGroupAdmin(widget.groupId).then((value){
+      setState(() => admin=value);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constants.offWhiteColor,
       appBar: AppBar(
-        elevation: 0,
+        elevation: 1,
         // centerTitle: true,
         leading: IconButton(
             onPressed: () => Navigator.pop(context),
@@ -40,7 +61,12 @@ class _ChatPageState extends State<ChatPage> {
         backgroundColor: Constants.whiteColor,
         actions: [
           IconButton(
-              onPressed: () => nextPage(context, const GroupInfoPage()),
+              onPressed: () => nextPage(context,GroupInfoPage(
+                groupId: widget.groupId,
+                groupName: widget.groupName,
+                groupIcon: widget.groupIcon,
+                adminName: admin,
+              )),
               icon: Icon(
                 Icons.info_rounded,
                 color: Constants.greyColor,
@@ -49,7 +75,7 @@ class _ChatPageState extends State<ChatPage> {
       ),
       body: Column(
         children: <Widget>[
-          Expanded(child: SizedBox()),
+          const Expanded(child: SizedBox()),
           // Align(
           //   alignment: Alignment.bottomCenter,
           //   child:
@@ -84,7 +110,7 @@ class _ChatPageState extends State<ChatPage> {
                       showCursor: true,
                       maxLines: 100,
                       textAlignVertical: TextAlignVertical.center,
-                      scrollPhysics: ClampingScrollPhysics(),
+                      scrollPhysics: const ClampingScrollPhysics(),
                       style: TextStyle(
                         color: Constants.blackColor,
                         fontFamily: 'Mulish-Reg',
