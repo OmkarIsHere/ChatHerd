@@ -27,7 +27,6 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
-    _isLoading = false;
     getUserNameAndUserId();
   }
 
@@ -39,6 +38,7 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Constants.whiteColor,
@@ -100,11 +100,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ],
         ),
-        body: (_isLoading)
-            ? Center(
-                child: CircularProgressIndicator(
-                    color: Constants.primaryLightColor))
-            : searchList(),
+        body: searchList(),
       ),
     );
   }
@@ -140,17 +136,17 @@ class _SearchPageState extends State<SearchPage> {
         : const SizedBox();
   }
 
-  Widget searchTile(
-      String groupName, String groupId, String userName, String adminName, String groupIcon) {
+  Widget searchTile(String groupName, String groupId, String userName,
+      String adminName, String groupIcon) {
     joinedOrNot(groupName, groupId, userName);
     return ListTile(
       leading: CircleAvatar(
         radius: 20,
         backgroundColor: Constants.dividerColor,
-        child:(groupIcon.isEmpty)
-            ? Image.asset('assets/images/user-group.png',fit: BoxFit.cover)
-            :Image.network(groupIcon,fit: BoxFit.cover),
-        ),
+        child: (groupIcon.isEmpty)
+            ? Image.asset('assets/images/user-group.png', fit: BoxFit.cover)
+            : Image.network(groupIcon, fit: BoxFit.cover),
+      ),
       title: Text(
         groupName,
         textAlign: TextAlign.start,
@@ -175,49 +171,57 @@ class _SearchPageState extends State<SearchPage> {
           color: Constants.greyColor,
         ),
       ),
-      trailing: (_isJoined == false)
-          ? InkWell(
-              onTap: ()async {
-                setState(() =>_isLoading = true);
-                await DatabaseServices(uid: FirebaseAuth.instance.currentUser!.uid).joinGroup(groupName, groupId, userName)
-                    .then((value) => nextPage(context, ChatPage(groupName:groupName,groupId: groupId,userName: userName, groupIcon: groupIcon)));
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Constants.offWhiteColor,
-                    border: Border.all(
-                      color: Constants.primaryLightColor,
-                      width: 1
+      trailing: (_isLoading == false)
+          ? (_isJoined == false)
+              ? InkWell(
+                  onTap: () async {
+                    setState(() => _isLoading = true);
+                    await DatabaseServices(
+                            uid: FirebaseAuth.instance.currentUser!.uid)
+                        .joinGroup(groupName, groupId, userName)
+                        .then((value) => nextPage(
+                            context,
+                            ChatPage(
+                                groupName: groupName,
+                                groupId: groupId,
+                                userName: userName,
+                                groupIcon: groupIcon)));
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Constants.offWhiteColor,
+                        border: Border.all(
+                            color: Constants.primaryLightColor, width: 1),
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      child: Text(
+                        'Join',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontSize: 14,
+                          height: 1.2,
+                          fontFamily: 'Mulish-Reg',
+                          color: Constants.primaryLightColor,
+                        ),
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(5)),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  ),
+                )
+              : InkWell(
+                  onTap: () {},
                   child: Text(
-                    'Join',
-                    textAlign: TextAlign.start,
+                    'Joined',
                     style: TextStyle(
                       fontSize: 14,
-                      height: 1.2,
                       fontFamily: 'Mulish-Reg',
                       color: Constants.primaryLightColor,
                     ),
                   ),
-                ),
-              ),
-            )
-          : InkWell(
-              onTap: () {},
-              child: Text(
-                'Joined',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'Mulish-Reg',
-                  color: Constants.primaryLightColor,
-                ),
-              ),
-            ),
-    );
+                )
+          : SizedBox(width: 20, height: 20,child: CircularProgressIndicator(color: Constants.primaryLightColor, strokeWidth: 2)),
+        );
   }
 
   joinedOrNot(String groupName, String groupId, String userName) async {
@@ -228,3 +232,8 @@ class _SearchPageState extends State<SearchPage> {
 
   String getName(String str) => str.substring(str.indexOf("_") + 1);
 }
+// (_isLoading)
+// ? Center(
+// child: CircularProgressIndicator(
+// color: Constants.primaryLightColor))
+// :

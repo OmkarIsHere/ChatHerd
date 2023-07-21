@@ -1,5 +1,6 @@
 import 'package:chat_herd/pages/group_info.dart';
 import 'package:chat_herd/services/database_services.dart';
+import 'package:chat_herd/widgets/chat_card.dart';
 import 'package:chat_herd/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -12,28 +13,36 @@ class ChatPage extends StatefulWidget {
   final String groupName;
   final String userName;
   final String groupIcon;
-  const ChatPage({super.key, required this.groupName, required this.groupId, required this.userName, required this.groupIcon});
+  const ChatPage(
+      {super.key,
+      required this.groupName,
+      required this.groupId,
+      required this.userName,
+      required this.groupIcon});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
-  Stream<QuerySnapshot>?chats;
-  String message ="";
-  String admin ="";
+  Stream<QuerySnapshot>? chats;
+  TextEditingController messageController = TextEditingController();
+  String admin = "";
+  String _message = "";
   @override
   void initState() {
     super.initState();
-  getChatAndAdmin();
+    getChatAndAdmin();
   }
-  getChatAndAdmin(){
-    DatabaseServices().getChats(widget.groupId).then((value){
-      setState(() => chats=value);
+
+  getChatAndAdmin() {
+    DatabaseServices().getChats(widget.groupId).then((value) {
+      setState(() => chats = value);
     });
-    DatabaseServices().getGroupAdmin(widget.groupId).then((value){
-      setState(() => admin=value);
+    DatabaseServices().getGroupAdmin(widget.groupId).then((value) {
+      setState(() => admin = value);
     });
+
   }
 
   @override
@@ -61,12 +70,14 @@ class _ChatPageState extends State<ChatPage> {
         backgroundColor: Constants.whiteColor,
         actions: [
           IconButton(
-              onPressed: () => nextPage(context,GroupInfoPage(
-                groupId: widget.groupId,
-                groupName: widget.groupName,
-                groupIcon: widget.groupIcon,
-                adminName: admin,
-              )),
+              onPressed: () => nextPage(
+                  context,
+                  GroupInfoPage(
+                    groupId: widget.groupId,
+                    groupName: widget.groupName,
+                    groupIcon: widget.groupIcon,
+                    adminName: admin,
+                  )),
               icon: Icon(
                 Icons.info_rounded,
                 color: Constants.greyColor,
@@ -75,8 +86,12 @@ class _ChatPageState extends State<ChatPage> {
       ),
       body: Column(
         children: <Widget>[
-          const Expanded(child: SizedBox()),
-          // Align(
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: messages(),
+            ),
+          ), // Align(
           //   alignment: Alignment.bottomCenter,
           //   child:
           Container(
@@ -102,9 +117,10 @@ class _ChatPageState extends State<ChatPage> {
                     child: TextField(
                       onChanged: (value){
                         setState(() {
-                          message = value.trim();
+                          _message = value.trim();
                         });
                       },
+                      controller: messageController,
                       keyboardType: TextInputType.multiline,
                       autofocus: true,
                       showCursor: true,
@@ -121,7 +137,8 @@ class _ChatPageState extends State<ChatPage> {
                         filled: true,
                         // fillColor: Colors.yellow.shade200,
                         fillColor: Constants.offWhiteColor,
-                        contentPadding:const EdgeInsets.symmetric(vertical: 4, horizontal: 5),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 4, horizontal: 5),
                         border: OutlineInputBorder(
                           borderSide: BorderSide.none,
                           borderRadius: BorderRadius.circular(5),
@@ -131,9 +148,17 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                 ),
                 Padding(
-                  padding:const EdgeInsets.symmetric(horizontal: 10),
-                    child:(message.isNotEmpty)? SvgPicture.asset(
-                        height: 24, width: 24, 'assets/svg/ic_send.svg'):Icon(Icons.mic, color: Constants.greyColor,),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: (_message.isNotEmpty)
+                      ? InkWell(
+                          onTap: () => sendMessage(),
+                          child: SvgPicture.asset(
+                              height: 24, width: 24, 'assets/svg/ic_send.svg'),
+                        )
+                      : Icon(
+                          Icons.mic,
+                          color: Constants.greyColor,
+                        ),
                 ),
               ],
             ),
@@ -142,5 +167,43 @@ class _ChatPageState extends State<ChatPage> {
         ],
       ),
     );
+  }
+
+  messages() {
+    return StreamBuilder(
+        stream: chats,
+        builder: (context, AsyncSnapshot snapshot) {
+          return snapshot.hasData
+              ? ListView.builder(
+                  shrinkWrap: true,
+                  reverse: true,
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (context, index) {
+                    return ChatCard(
+                        message: snapshot.data.docs[index]['message'],
+                        sender: snapshot.data.docs[index]['sender'],
+                        sendByMe: widget.userName ==
+                            snapshot.data.docs[index]['sender'],
+                    time:snapshot.data.docs[index]['time'].toString());
+                  })
+              : const SizedBox();
+        });
+  }
+
+  sendMessage() {
+    if (messageController.text.isNotEmpty) {
+      Map<String, dynamic>chatMessageMap={
+        'message': messageController.text,
+        'sender':widget.userName,
+        'time':DateTime.now().millisecondsSinceEpoch
+      };
+
+      DatabaseServices().sendMessage(widget.groupId, chatMessageMap);
+      setState(() {
+        messageController.clear();
+        _message='';
+      } );
+
+    }
   }
 }

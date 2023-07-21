@@ -75,6 +75,6 @@ class _MemberCardState extends State<MemberCard> {
       :const SizedBox(),
     );
   }
-  // String getId(String str) => str.substring(0, str.indexOf("_"));
+
   String getName(String str) => str.substring(str.indexOf("_") + 1);
 }

@@ -50,7 +50,7 @@ class DatabaseServices{
   }
 
   getChats(String groupId)async{
-    return groupCollection.doc(groupId).collection('messages').orderBy('time').snapshots();
+    return groupCollection.doc(groupId).collection('message').orderBy('time', descending: true).snapshots();
     }
 
   Future getGroupAdmin(String groupId)async{
@@ -93,5 +93,14 @@ class DatabaseServices{
     await userDocumentReference.update({'groups':FieldValue.arrayRemove(['${groupId}_$groupName'])});
     await groupDocumentReference.update({'members':FieldValue.arrayRemove(['${uid}_$userName'])});
   }
+
+  sendMessage(String groupId, Map<String, dynamic>chatMessage)async{
+    groupCollection.doc(groupId).collection('message').add(chatMessage);
+    groupCollection.doc(groupId).update({
+      'recentMessage':chatMessage['message'],
+      'recentMessageSender':chatMessage['sender'],
+      'recentMessageTime':chatMessage['time'].toString(),
+    });
+}
 
 }

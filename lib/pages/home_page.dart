@@ -184,7 +184,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context) {
           return StatefulBuilder(builder: ((context, setState) {
             return AlertDialog(
-              title: const Text('Create a herd', textAlign: TextAlign.center),
+              title: const Text('Create a new herd', textAlign: TextAlign.start),
               backgroundColor: Constants.whiteColor,
               content: Form(
                 key: formKey,

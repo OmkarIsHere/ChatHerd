@@ -1,7 +1,5 @@
-import 'package:chat_herd/pages/home_page.dart';
 import 'package:chat_herd/services/database_services.dart';
 import 'package:chat_herd/widgets/member_card.dart';
-import 'package:chat_herd/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -30,6 +28,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
   bool _visibility = true;
   var temp = 0;
   String? userName;
+
   @override
   void initState() {
     super.initState();
@@ -209,13 +208,15 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                     ),
                     ElevatedButton(
                       onPressed: () async {
+                        setState(() {});
+                        _visibility = false;
                         await DatabaseServices(
                                 uid: FirebaseAuth.instance.currentUser!.uid)
                             .exitGroup(widget.groupName, widget.groupId,
                                 userName ?? 'null');
-                        setState(() => _visibility = false);
+
                         if (!mounted) return;
-                        nextPageReplacement(context, const HomePage());
+                        Navigator.of(context)..pop()..pop()..pop();
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
@@ -238,8 +239,11 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                   ]
                 : [
                     Center(
-                        child: CircularProgressIndicator(
-                            color: Constants.primaryLightColor)),
+                        child: SizedBox(
+                          height: 20,width: 20,
+                          child: CircularProgressIndicator(
+                              color: Constants.primaryLightColor),
+                        )),
                   ],
           );
         });
@@ -295,6 +299,4 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
     members;
     memberList();
   }
-  // String getId(String str) => str.substring(0, str.indexOf("_"));
-  // String getName(String str) => str.substring(str.indexOf("_") + 1);
 }
