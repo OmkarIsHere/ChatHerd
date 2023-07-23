@@ -1,5 +1,6 @@
 import 'package:chat_herd/shared/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ChatCard extends StatefulWidget {
   final String message;
@@ -13,6 +14,10 @@ class ChatCard extends StatefulWidget {
 }
 
 class _ChatCardState extends State<ChatCard> {
+  getTime(int time){
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(time);
+    return DateFormat('MMM d, h:mm a').format(dateTime);
+  }
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -67,7 +72,7 @@ class _ChatCardState extends State<ChatCard> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    widget.time,
+                    getTime(int.parse(widget.time)),
                     textAlign: TextAlign.start,
                     softWrap: true,
                     maxLines: 1,

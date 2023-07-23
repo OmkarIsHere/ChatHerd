@@ -154,7 +154,7 @@ class _LoginInPageState extends State<LoginInPage> {
       setState(() {
         _isLoading = true;
       });
-      print('email-$email, password-$password');
+      print('email: $email, password: $password');
       await authServices.loginUserWithEmailAndPassword(email, password)
           .then((value) async{
         if(value == true){
@@ -164,7 +164,6 @@ class _LoginInPageState extends State<LoginInPage> {
           HelperFunction.saveUserNameSF(snapshot.docs[0]['fullName']);
           if(!mounted) return;
           nextPageReplacement(context, const HomePage());
-
 
           // setState(() {
           //   _isLoading = false;

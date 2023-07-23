@@ -1,7 +1,10 @@
 import 'package:chat_herd/helper/helper_function.dart';
 import 'package:chat_herd/pages/onboarding_page.dart';
 import 'package:chat_herd/services/auth_services.dart';
+import 'package:chat_herd/services/database_services.dart';
 import 'package:chat_herd/widgets/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -17,12 +20,14 @@ class MorePage extends StatefulWidget {
 class _MorePageState extends State<MorePage> {
   String fullName = 'null';
   String emailAddress = 'null';
+  String profilePic = 'null';
   AuthServices authServices = AuthServices();
 
   @override
   void initState() {
     super.initState();
     getUserData();
+    getProfilePic();
   }
 
   getUserData() {
@@ -30,6 +35,26 @@ class _MorePageState extends State<MorePage> {
         .then((value) => setState(() => fullName = value!));
     HelperFunction.getUserEmailSF()
         .then((value) => setState(() => emailAddress = value!));
+  }
+
+  getProfilePic() async {
+    QuerySnapshot snapshot =
+        await DatabaseServices(uid: FirebaseAuth.instance.currentUser!.uid)
+            .getUserProfilePic(FirebaseAuth.instance.currentUser!.uid);
+    if (snapshot.docs.isNotEmpty) {
+      setState(() => profilePic = snapshot.docs[0]['profilePic']);
+    } else {
+      print('doesnt exists');
+    }
+  }
+
+  updateProfilePic(String profilePicture) async {
+    profilePic = profilePicture;
+    await DatabaseServices(uid: FirebaseAuth.instance.currentUser!.uid)
+        .updateUserProfilePic(profilePicture);
+      if (!mounted) return;
+      Navigator.pop(context);
+      setState(() {});
   }
 
   signOut() async {
@@ -43,7 +68,8 @@ class _MorePageState extends State<MorePage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            titlePadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            titlePadding:
+                const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             title: Text(
               'Logout',
               style: TextStyle(
@@ -53,7 +79,7 @@ class _MorePageState extends State<MorePage> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            contentPadding:const EdgeInsets.symmetric(horizontal: 15),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 15),
             content: Text(
               'Are you sure you want to logout?',
               style: TextStyle(
@@ -62,46 +88,151 @@ class _MorePageState extends State<MorePage> {
                 fontFamily: 'Mulish-Reg',
               ),
             ),
-            actionsPadding:const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            actionsPadding:
+                const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             actions: [
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
                   backgroundColor: Constants.greyColor,
-                  side:const BorderSide(width:50),
-                  shape:RoundedRectangleBorder(
+                  side: const BorderSide(width: 50),
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),
                   ),
                 ),
-                child:Text(
+                child: Text(
                   'Cancel',
                   style: TextStyle(
                     color: Constants.whiteColor,
                     fontSize: 14,
                     fontFamily: 'Mulish-Reg',
                   ),
-                ), ),
+                ),
+              ),
               ElevatedButton(
-                  onPressed: ()=>signOut(),
-                  style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    backgroundColor: Constants.redColor,
-                    side:const BorderSide(width:50),
-                    shape:RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
+                onPressed: () => signOut(),
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: Constants.redColor,
+                  side: const BorderSide(width: 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                ),
+                child: Text(
+                  'Logout',
+                  style: TextStyle(
+                    color: Constants.whiteColor,
+                    fontSize: 14,
+                    fontFamily: 'Mulish-Reg',
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  popUpAvatarDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            titlePadding:
+                const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            title: Text(
+              'Select Avatar',
+              style: TextStyle(
+                color: Constants.blackColor,
+                fontSize: 16,
+                fontFamily: 'Mulish-Reg',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            content: AspectRatio(
+              aspectRatio: 4 / 2,
+              child: GridView.count(
+                crossAxisCount: 4,
+                shrinkWrap: true,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                children: <Widget>[
+                  InkWell(
+                    onTap: () =>updateProfilePic('https://dl.dropboxusercontent.com/s/k5r5b2l6xbjyv0v/m1.png?dl=0'),
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Constants.greyColor,
+                      child: Image.asset('assets/images/m1.png'),
                     ),
                   ),
-                  child:Text(
-                    'Logout',
-                    style: TextStyle(
-                      color: Constants.whiteColor,
-                      fontSize: 14,
-                      fontFamily: 'Mulish-Reg',
-                      fontWeight: FontWeight.w400,
+                  InkWell(
+                    onTap: () => updateProfilePic(
+                        'https://dl.dropboxusercontent.com/s/5k028tudqz7p39c/m2.png?dl=0'),
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Constants.greyColor,
+                      child: Image.asset('assets/images/m2.png'),
                     ),
-                  ), ),
-            ],
+                  ),
+                  InkWell(
+                    onTap: () =>updateProfilePic(
+                        'https://dl.dropboxusercontent.com/s/h9dqfxpom5zh2ko/m3.png?dl=0'),
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Constants.greyColor,
+                      child: Image.asset('assets/images/m3.png'),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () =>updateProfilePic(
+                        'https://dl.dropboxusercontent.com/s/htyzll5kc4bnx32/m4.png?dl=0'),
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Constants.greyColor,
+                      child: Image.asset('assets/images/m4.png'),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () => updateProfilePic(
+                        'https://dl.dropboxusercontent.com/s/7ze2z964o5y7i83/w1.png?dl=0'),
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Constants.greyColor,
+                      child: Image.asset('assets/images/w1.png'),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () => updateProfilePic(
+                        'https://dl.dropboxusercontent.com/s/tavueqmubgh5qj8/w2.png?dl=0'),
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Constants.greyColor,
+                      child: Image.asset('assets/images/w2.png'),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () => updateProfilePic(
+                        'https://dl.dropboxusercontent.com/s/ci57dtq7nl43fx7/w3.png?dl=0'),
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Constants.greyColor,
+                      child: Image.asset('assets/images/w3.png'),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () => updateProfilePic(
+                        'https://dl.dropboxusercontent.com/s/9enfsgflwsqpyyi/w4.png?dl=0'),
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Constants.greyColor,
+                      child: Image.asset('assets/images/w4.png'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           );
         });
   }
@@ -115,8 +246,7 @@ class _MorePageState extends State<MorePage> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding:
-                    const EdgeInsets.only(left: 22, top: 15, bottom: 12),
+                padding: const EdgeInsets.only(left: 22, top: 15, bottom: 12),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -142,10 +272,35 @@ class _MorePageState extends State<MorePage> {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Constants.greyColor,
-                          child: Image.asset('assets/images/user.png'),
+                        InkWell(
+                          onTap: () => popUpAvatarDialog(context),
+                          child: CircleAvatar(
+                            radius: 25,
+                            backgroundColor: Constants.greyColor,
+                            child: (profilePic == 'null')
+                                ? Image.asset('assets/images/user.png')
+                                : Image.network(
+                                    profilePic,
+                                    fit: BoxFit.cover,
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent? loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                          ),
                         ),
                         const SizedBox(width: 15),
                         Column(

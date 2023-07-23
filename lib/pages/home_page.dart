@@ -178,7 +178,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  popUpDialog(BuildContext context) {
+  popUpDialog(BuildContext context)
+  {
     showDialog(
         context: context,
         builder: (context) {

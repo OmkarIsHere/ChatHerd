@@ -193,7 +193,7 @@ class _ChatPageState extends State<ChatPage> {
   sendMessage() {
     if (messageController.text.isNotEmpty) {
       Map<String, dynamic>chatMessageMap={
-        'message': messageController.text,
+        'message': messageController.text.trim(),
         'sender':widget.userName,
         'time':DateTime.now().millisecondsSinceEpoch
       };
@@ -206,4 +206,5 @@ class _ChatPageState extends State<ChatPage> {
 
     }
   }
+
 }
