@@ -1,5 +1,4 @@
 import 'package:chat_herd/helper/helper_function.dart';
-import 'package:chat_herd/pages/home_page.dart';
 import 'package:chat_herd/pages/main_page.dart';
 import 'package:chat_herd/pages/onboarding_page.dart';
 import 'package:chat_herd/shared/constants.dart';

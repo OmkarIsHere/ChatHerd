@@ -164,10 +164,6 @@ class _LoginInPageState extends State<LoginInPage> {
           HelperFunction.saveUserNameSF(snapshot.docs[0]['fullName']);
           if(!mounted) return;
           nextPageReplacement(context, const HomePage());
-
-          // setState(() {
-          //   _isLoading = false;
-          // });
         }else{
           showSnackBar(context, Constants.redColor, value, 10);
           setState(() {

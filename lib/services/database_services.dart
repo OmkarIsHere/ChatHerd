@@ -22,6 +22,10 @@ class DatabaseServices{
     return snapshot;
   }
 
+  Future getUserProfilePic(String userId)async{
+    return await userCollection.where('uid', isEqualTo:userId).get();
+  }
+
   getUserGroups() async {
     return userCollection.doc(uid).snapshots();
   }
@@ -101,6 +105,10 @@ class DatabaseServices{
       'recentMessageSender':chatMessage['sender'],
       'recentMessageTime':chatMessage['time'].toString(),
     });
-}
+  }
+
+  updateUserProfilePic(String img)async{
+    userCollection.doc(uid).update({'profilePic':img});
+  }
 
 }
