@@ -25,6 +25,9 @@ class DatabaseServices{
   Future getUserProfilePic(String userId)async{
     return await userCollection.where('uid', isEqualTo:userId).get();
   }
+  Future getGroupData(String groupId)async{
+    return await groupCollection.where('groupId', isEqualTo:groupId).get();
+  }
 
   getUserGroups() async {
     return userCollection.doc(uid).snapshots();

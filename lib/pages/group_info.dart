@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../helper/helper_function.dart';
 import '../shared/constants.dart';
+import '../widgets/widgets.dart';
 
 class GroupInfoPage extends StatefulWidget {
   final String groupId;
@@ -34,10 +35,11 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
     super.initState();
     getGroupMembers();
     getUserNameAndUserId();
+
   }
 
-  getUserNameAndUserId() {
-    HelperFunction.getUserNameSF()
+  getUserNameAndUserId() async{
+    await HelperFunction.getUserNameSF()
         .then((value) => setState(() => userName = value!));
   }
 
@@ -122,7 +124,9 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 12),
                         child: InkWell(
-                          onTap: () => popUpDialog(context),
+                          onTap: () => (widget.adminName ==  '${FirebaseAuth.instance.currentUser!.uid}_$userName')
+                              ?showSnackBar(context, Constants.redColor, 'Admin can\'t exit from their own group', 3)
+                              :popUpDialog(context),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.center,

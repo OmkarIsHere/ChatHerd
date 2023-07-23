@@ -18,6 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Stream? groups;
+  Stream? groupsData;
   bool _isLoading = false;
   String? groupName;
   String? userName;
@@ -44,6 +45,7 @@ class _HomePageState extends State<HomePage> {
         groups = snapshot;
       });
     });
+
     await HelperFunction.getUserNameSF().then((value) {
       setState(() {
         userName = value;
@@ -129,11 +131,12 @@ class _HomePageState extends State<HomePage> {
                     physics: const ClampingScrollPhysics(),
                     itemCount: snapshot.data['groups'].length,
                     itemBuilder: (context, index) {
-                      return GroupCard(
-                          groupName: getName(snapshot.data['groups'][index]),
-                          groupIcon: '',
-                          groupId: getId(snapshot.data['groups'][index]),
-                          userName: userName ?? 'null');
+                            return GroupCard(
+                              groupName: getName(snapshot
+                                  .data['groups'][index]),
+                              groupIcon: '',
+                              groupId: getId(snapshot.data['groups'][index]),
+                              userName: userName ?? 'null');
                     });
               } else {
                 return noGroupWidget();

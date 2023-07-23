@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../services/database_services.dart';
 import '../shared/constants.dart';
 
 class MemberCard extends StatefulWidget {
@@ -12,20 +16,60 @@ class MemberCard extends StatefulWidget {
 }
 
 class _MemberCardState extends State<MemberCard> {
+  String email ='';
+  String profilePic ='';
+@override
+  void initState() {
+    super.initState();
+  getUserData();
+}
+
+getUserData()async {
+  QuerySnapshot snapshot =
+      await DatabaseServices(uid: FirebaseAuth.instance.currentUser!.uid)
+      .getUserProfilePic(getId(widget.memberName));
+  if (snapshot.docs.isNotEmpty) {
+    setState(() {
+      email = snapshot.docs[0]['email'];
+      profilePic = snapshot.docs[0]['profilePic'];
+    });
+  } else {
+    if (kDebugMode) {
+      print('doesnt exists');
+    }
+  }
+}
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       // tileColor: Colors.red.shade200,
       leading: CircleAvatar(
-        radius: 24,
-        backgroundColor: Constants.dividerColor,
-        child: Image.asset(
-          // width:32,
-          // height:32,
-          'assets/images/user.png',
-          fit: BoxFit.cover,
-        ),
+        radius: 25,
+        backgroundColor: Constants.greyColor,
+        child: (profilePic == '')
+            ? Image.asset('assets/images/user.png')
+            : Image.network(
+              profilePic,
+              fit: BoxFit.cover,
+              loadingBuilder: (BuildContext context,
+                  Widget child,
+                  ImageChunkEvent? loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress
+                        .expectedTotalBytes !=
+                        null
+                        ? loadingProgress
+                        .cumulativeBytesLoaded /
+                        loadingProgress
+                            .expectedTotalBytes!
+                        : null,
+                  ),
+                );
+              },
+            ),
       ),
       title: Text(
         getName(widget.memberName),
@@ -40,7 +84,7 @@ class _MemberCardState extends State<MemberCard> {
         ),
       ),
       subtitle:  Text(
-        'example@email.com',
+        email,
         textAlign: TextAlign.start,
         maxLines: 1,
         style: TextStyle(
@@ -77,4 +121,5 @@ class _MemberCardState extends State<MemberCard> {
   }
 
   String getName(String str) => str.substring(str.indexOf("_") + 1);
+  String getId(String str) => str.substring(0,str.indexOf("_"));
 }

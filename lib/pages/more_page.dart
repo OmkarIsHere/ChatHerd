@@ -5,6 +5,7 @@ import 'package:chat_herd/services/database_services.dart';
 import 'package:chat_herd/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -20,7 +21,7 @@ class MorePage extends StatefulWidget {
 class _MorePageState extends State<MorePage> {
   String fullName = 'null';
   String emailAddress = 'null';
-  String profilePic = 'null';
+  String profilePic = '';
   AuthServices authServices = AuthServices();
 
   @override
@@ -44,7 +45,9 @@ class _MorePageState extends State<MorePage> {
     if (snapshot.docs.isNotEmpty) {
       setState(() => profilePic = snapshot.docs[0]['profilePic']);
     } else {
-      print('doesnt exists');
+      if (kDebugMode) {
+        print('doesnt exists');
+      }
     }
   }
 
@@ -52,9 +55,9 @@ class _MorePageState extends State<MorePage> {
     profilePic = profilePicture;
     await DatabaseServices(uid: FirebaseAuth.instance.currentUser!.uid)
         .updateUserProfilePic(profilePicture);
-      if (!mounted) return;
-      Navigator.pop(context);
-      setState(() {});
+    if (!mounted) return;
+    Navigator.pop(context);
+    setState(() {});
   }
 
   signOut() async {
@@ -160,7 +163,8 @@ class _MorePageState extends State<MorePage> {
                 crossAxisSpacing: 10,
                 children: <Widget>[
                   InkWell(
-                    onTap: () =>updateProfilePic('https://dl.dropboxusercontent.com/s/k5r5b2l6xbjyv0v/m1.png?dl=0'),
+                    onTap: () => updateProfilePic(
+                        'https://dl.dropboxusercontent.com/s/k5r5b2l6xbjyv0v/m1.png?dl=0'),
                     child: CircleAvatar(
                       radius: 25,
                       backgroundColor: Constants.greyColor,
@@ -177,7 +181,7 @@ class _MorePageState extends State<MorePage> {
                     ),
                   ),
                   InkWell(
-                    onTap: () =>updateProfilePic(
+                    onTap: () => updateProfilePic(
                         'https://dl.dropboxusercontent.com/s/h9dqfxpom5zh2ko/m3.png?dl=0'),
                     child: CircleAvatar(
                       radius: 25,
@@ -186,7 +190,7 @@ class _MorePageState extends State<MorePage> {
                     ),
                   ),
                   InkWell(
-                    onTap: () =>updateProfilePic(
+                    onTap: () => updateProfilePic(
                         'https://dl.dropboxusercontent.com/s/htyzll5kc4bnx32/m4.png?dl=0'),
                     child: CircleAvatar(
                       radius: 25,
@@ -277,28 +281,43 @@ class _MorePageState extends State<MorePage> {
                           child: CircleAvatar(
                             radius: 25,
                             backgroundColor: Constants.greyColor,
-                            child: (profilePic == 'null')
+                            child: (profilePic == '')
                                 ? Image.asset('assets/images/user.png')
-                                : Image.network(
-                                    profilePic,
-                                    fit: BoxFit.cover,
-                                    loadingBuilder: (BuildContext context,
-                                        Widget child,
-                                        ImageChunkEvent? loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          value: loadingProgress
-                                                      .expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  loadingProgress
-                                                      .expectedTotalBytes!
-                                              : null,
-                                        ),
-                                      );
-                                    },
+                                : Stack(
+                                    children: [
+                                      Image.network(
+                                        profilePic,
+                                        fit: BoxFit.cover,
+                                        loadingBuilder: (BuildContext context,
+                                            Widget child,
+                                            ImageChunkEvent? loadingProgress) {
+                                          if (loadingProgress == null)
+                                            return child;
+                                          return Center(
+                                            child: CircularProgressIndicator(
+                                              value: loadingProgress
+                                                          .expectedTotalBytes !=
+                                                      null
+                                                  ? loadingProgress
+                                                          .cumulativeBytesLoaded /
+                                                      loadingProgress
+                                                          .expectedTotalBytes!
+                                                  : null,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      Positioned(
+                                        right: 0,
+                                          bottom: 0,
+                                          child: Container(
+                                            padding:const EdgeInsets.all(2),
+                                            decoration: BoxDecoration(
+                                              color: Constants.hintColor,
+                                              borderRadius: BorderRadius.circular(50),
+                                            ),
+                                              child: Icon(Icons.edit, color: Constants.blackColor,size: 12))),
+                                    ],
                                   ),
                           ),
                         ),
@@ -327,7 +346,7 @@ class _MorePageState extends State<MorePage> {
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                   color: Constants.greyColor,
-                                  fontSize: 12,
+                                  fontSize: 13,
                                   fontFamily: 'Mulish-Reg',
                                 ),
                               ),
@@ -336,12 +355,7 @@ class _MorePageState extends State<MorePage> {
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 24,
-                      width: 24,
-                      child:
-                          SvgPicture.asset('assets/svg/ic_forward_black.svg'),
-                    )
+                    const SizedBox()
                   ],
                 ),
               ),
