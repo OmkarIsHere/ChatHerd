@@ -3,8 +3,10 @@ import 'package:chat_herd/services/database_services.dart';
 import 'package:chat_herd/widgets/chat_card.dart';
 import 'package:chat_herd/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 
 import '../shared/constants.dart';
 
@@ -35,6 +37,22 @@ class _ChatPageState extends State<ChatPage> {
     getChatAndAdmin();
   }
 
+  encryptString(String plainText) {
+    final key = encrypt.Key.fromUtf8('my 32 length key................');
+    final iv = encrypt.IV.fromLength(16);
+    final encrypter = encrypt.Encrypter(AES(key));
+    final encrypted = encrypter.encrypt(plainText, iv: iv);
+    return encrypted.base64;
+  }
+
+  decryptString(String encrypted) {
+    final key = encrypt.Key.fromUtf8('my 32 length key................');
+    final iv = encrypt.IV.fromLength(16);
+    final encrypter = encrypt.Encrypter(AES(key));
+    final decrypted = encrypter.decrypt(Encrypted.fromBase64(encrypted), iv: iv);
+    return decrypted;
+  }
+
   getChatAndAdmin() {
     DatabaseServices().getChats(widget.groupId).then((value) {
       setState(() => chats = value);
@@ -42,7 +60,6 @@ class _ChatPageState extends State<ChatPage> {
     DatabaseServices().getGroupAdmin(widget.groupId).then((value) {
       setState(() => admin = value);
     });
-
   }
 
   @override
@@ -115,7 +132,7 @@ class _ChatPageState extends State<ChatPage> {
                   child: SizedBox(
                     height: 36,
                     child: TextField(
-                      onChanged: (value){
+                      onChanged: (value) {
                         setState(() {
                           _message = value.trim();
                         });
@@ -180,11 +197,11 @@ class _ChatPageState extends State<ChatPage> {
                   itemCount: snapshot.data.docs.length,
                   itemBuilder: (context, index) {
                     return ChatCard(
-                        message: snapshot.data.docs[index]['message'],
+                        message: decryptString(snapshot.data.docs[index]['message']),
                         sender: snapshot.data.docs[index]['sender'],
                         sendByMe: widget.userName ==
                             snapshot.data.docs[index]['sender'],
-                    time:snapshot.data.docs[index]['time'].toString());
+                        time: snapshot.data.docs[index]['time'].toString());
                   })
               : const SizedBox();
         });
@@ -192,19 +209,17 @@ class _ChatPageState extends State<ChatPage> {
 
   sendMessage() {
     if (messageController.text.isNotEmpty) {
-      Map<String, dynamic>chatMessageMap={
-        'message': messageController.text.trim(),
-        'sender':widget.userName,
-        'time':DateTime.now().millisecondsSinceEpoch
+      Map<String, dynamic> chatMessageMap = {
+        'message': encryptString(messageController.text.trim()),
+        'sender': widget.userName,
+        'time': DateTime.now().millisecondsSinceEpoch
       };
 
       DatabaseServices().sendMessage(widget.groupId, chatMessageMap);
       setState(() {
         messageController.clear();
-        _message='';
-      } );
-
+        _message = '';
+      });
     }
   }
-
 }

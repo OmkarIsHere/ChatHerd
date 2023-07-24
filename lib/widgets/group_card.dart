@@ -4,7 +4,8 @@ import 'package:chat_herd/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:encrypt/encrypt.dart';
 import '../services/database_services.dart';
 
 class GroupCard extends StatefulWidget {
@@ -39,8 +40,21 @@ class _GroupCardState extends State<GroupCard> {
       } else {
         sender = 'Me';
       }
-      recentMessage = snapshot.docs[0]['recentMessage'];
+      recentMessage = decryptString(snapshot.docs[0]['recentMessage']);
     });
+  }
+
+  decryptString(String encrypted) {
+    if (encrypted.isNotEmpty) {
+      final key = encrypt.Key.fromUtf8('my 32 length key................');
+      final iv = encrypt.IV.fromLength(16);
+      final encrypter = encrypt.Encrypter(AES(key));
+      final decrypted = encrypter.decrypt(
+          Encrypted.fromBase64(encrypted), iv: iv);
+      return decrypted;
+    } else {
+      return '';
+    }
   }
 
   @override

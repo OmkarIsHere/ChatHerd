@@ -37,6 +37,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     getUserLoggedInStatus();
+
   }
 
   getUserLoggedInStatus() {
@@ -49,6 +50,8 @@ class _MyAppState extends State<MyApp> {
             }
         });
   }
+
+
 
   @override
   Widget build(BuildContext context) {

@@ -29,8 +29,8 @@ class _MorePageState extends State<MorePage> {
     super.initState();
     getUserData();
     getProfilePic();
-  }
 
+  }
   getUserData() {
     HelperFunction.getUserNameSF()
         .then((value) => setState(() => fullName = value!));

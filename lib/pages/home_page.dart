@@ -6,7 +6,6 @@ import 'package:chat_herd/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import '../shared/constants.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,13 +28,11 @@ class _HomePageState extends State<HomePage> {
     getUserData();
   }
 
-  String getId(String str) {
-    return str.substring(0, str.indexOf("_"));
-  }
+  String getId(String str) => str.substring(0, str.indexOf("_"));
 
-  String getName(String str) {
-    return str.substring(str.indexOf("_") + 1);
-  }
+
+  String getName(String str) =>str.substring(str.indexOf("_") + 1);
+
 
   getUserData() async {
     await DatabaseServices(uid: FirebaseAuth.instance.currentUser!.uid)
