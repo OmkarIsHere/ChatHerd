@@ -19,8 +19,10 @@ class _SearchPageState extends State<SearchPage> {
   TextEditingController searchController = TextEditingController();
   bool _isLoading = false;
   bool _isJoined = false;
-  QuerySnapshot? snapshot;
+  bool _isJoining= false;
   bool _hasUserSearched = false;
+  bool _hasData = true;
+  QuerySnapshot? snapshot;
   String? userName;
   User? user;
 
@@ -38,7 +40,6 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       child: Scaffold(
         backgroundColor: Constants.whiteColor,
@@ -111,28 +112,56 @@ class _SearchPageState extends State<SearchPage> {
       await DatabaseServices()
           .getSearchResult(searchController.text.trim())
           .then((value) {
-        setState(() {
-          snapshot = value;
-          _isLoading = false;
-          _hasUserSearched = true;
-        });
+        if (value.docs.length != 0) {
+          setState(() {
+            snapshot = value;
+            _isLoading = false;
+            _hasUserSearched = true;
+            _hasData = true;
+          });
+        } else {
+          setState(() {
+            _isLoading = false;
+            _hasUserSearched = true;
+            _hasData = false;
+          });
+        }
       });
     }
   }
 
   searchList() {
     return (_hasUserSearched)
-        ? ListView.builder(
-            shrinkWrap: true,
-            itemCount: snapshot!.docs.length,
-            itemBuilder: (context, index) {
-              return searchTile(
-                  snapshot!.docs[index]['groupName'],
-                  snapshot!.docs[index]['groupId'],
-                  userName!,
-                  snapshot!.docs[index]['admin'],
-                  snapshot!.docs[index]['groupIcon']);
-            })
+        ? (_isLoading == false)
+            ? (_hasData)
+                ? ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: snapshot!.docs.length,
+                    itemBuilder: (context, index) {
+                      return searchTile(
+                          snapshot!.docs[index]['groupName'],
+                          snapshot!.docs[index]['groupId'],
+                          userName!,
+                          snapshot!.docs[index]['admin'],
+                          snapshot!.docs[index]['groupIcon']);
+                    })
+                : Center(
+                    child: Text(
+                      'No result found',
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      style: TextStyle(
+                        fontSize: 16,
+                        height: 1.4,
+                        overflow: TextOverflow.ellipsis,
+                        fontFamily: 'Mulish-Reg',
+                        color: Constants.blackColor,
+                      ),
+                    ),
+                  )
+            : Center(
+                child: CircularProgressIndicator(
+                    color: Constants.primaryLightColor, strokeWidth: 2))
         : const SizedBox();
   }
 
@@ -171,11 +200,11 @@ class _SearchPageState extends State<SearchPage> {
           color: Constants.greyColor,
         ),
       ),
-      trailing: (_isLoading == false)
+      trailing: (_isJoining == false)
           ? (_isJoined == false)
               ? InkWell(
                   onTap: () async {
-                    setState(() => _isLoading = true);
+                    setState(() => _isJoining = true);
                     await DatabaseServices(
                             uid: FirebaseAuth.instance.currentUser!.uid)
                         .joinGroup(groupName, groupId, userName)
@@ -220,8 +249,12 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   ),
                 )
-          : SizedBox(width: 20, height: 20,child: CircularProgressIndicator(color: Constants.primaryLightColor, strokeWidth: 2)),
-        );
+          : SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                  color: Constants.primaryLightColor, strokeWidth: 2)),
+    );
   }
 
   joinedOrNot(String groupName, String groupId, String userName) async {
@@ -232,8 +265,4 @@ class _SearchPageState extends State<SearchPage> {
 
   String getName(String str) => str.substring(str.indexOf("_") + 1);
 }
-// (_isLoading)
-// ? Center(
-// child: CircularProgressIndicator(
-// color: Constants.primaryLightColor))
-// :
+
