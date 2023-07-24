@@ -46,7 +46,7 @@ class _OnBoardingState extends State<OnBoarding> {
                     horizontal: MediaQuery.of(context).size.width * 0.18,
                     vertical: 30),
                 child: Text(
-                  'Connect easily with your family and friends over countries',
+                  'Connect easily with your community and friends over countries',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Constants.blackColor,//Color(0xFF0F1828),
