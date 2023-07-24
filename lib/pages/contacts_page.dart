@@ -13,8 +13,8 @@ class ContactPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SizedBox(
-                  height: MediaQuery.of(context).size.width*0.5,
-                  width: MediaQuery.of(context).size.width*0.5,
+                  height: MediaQuery.of(context).size.width*0.4,
+                  width: MediaQuery.of(context).size.width*0.4,
                   child: Image.asset('assets/images/under-construction_lightTheme.png')),
               const SizedBox(height: 10),
               Text(

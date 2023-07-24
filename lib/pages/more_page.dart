@@ -282,7 +282,20 @@ class _MorePageState extends State<MorePage> {
                             radius: 25,
                             backgroundColor: Constants.greyColor,
                             child: (profilePic == '')
-                                ? Image.asset('assets/images/user.png')
+                                ? Stack(
+                              children: [
+                                Image.asset('assets/images/user.png'),
+                                Positioned(
+                                    right: 0,
+                                    bottom: 0,
+                                    child: Container(
+                                        padding:const EdgeInsets.all(2),
+                                        decoration: BoxDecoration(
+                                          color: Constants.hintColor,
+                                          borderRadius: BorderRadius.circular(50),
+                                        ),
+                                        child: Icon(Icons.edit, color: Constants.blackColor,size: 12))),
+                              ],)
                                 : Stack(
                                     children: [
                                       Image.network(
@@ -291,8 +304,7 @@ class _MorePageState extends State<MorePage> {
                                         loadingBuilder: (BuildContext context,
                                             Widget child,
                                             ImageChunkEvent? loadingProgress) {
-                                          if (loadingProgress == null)
-                                            return child;
+                                          if (loadingProgress == null) return child;
                                           return Center(
                                             child: CircularProgressIndicator(
                                               value: loadingProgress
