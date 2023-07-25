@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
-import '../shared/constants.dart';
+import '../helper/helper_function.dart';
 
 class ChatPage extends StatefulWidget {
   final String groupId;
@@ -31,10 +31,18 @@ class _ChatPageState extends State<ChatPage> {
   TextEditingController messageController = TextEditingController();
   String admin = "";
   String _message = "";
+  String _themeMode = 'Light';
   @override
   void initState() {
     super.initState();
     getChatAndAdmin();
+    getThemeMode();
+  }
+
+  getThemeMode() {
+    HelperFunction.getThemeMode().then((value) => {
+          if (value != null) {setState(() => _themeMode = value)}
+        });
   }
 
   encryptString(String plainText) {
@@ -49,7 +57,8 @@ class _ChatPageState extends State<ChatPage> {
     final key = encrypt.Key.fromUtf8('my 32 length key................');
     final iv = encrypt.IV.fromLength(16);
     final encrypter = encrypt.Encrypter(AES(key));
-    final decrypted = encrypter.decrypt(Encrypted.fromBase64(encrypted), iv: iv);
+    final decrypted =
+        encrypter.decrypt(Encrypted.fromBase64(encrypted), iv: iv);
     return decrypted;
   }
 
@@ -65,8 +74,9 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constants.offWhiteColor,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.background,
         elevation: 1,
         // centerTitle: true,
         leading: IconButton(
@@ -74,17 +84,16 @@ class _ChatPageState extends State<ChatPage> {
             icon: Icon(
               Icons.arrow_back_ios_new_rounded,
               size: 20,
-              color: Constants.blackColor,
+              color: Theme.of(context).colorScheme.secondary,
             )),
         title: Text(
           widget.groupName,
           style: TextStyle(
-              color: Constants.blackColor,
+              color: Theme.of(context).colorScheme.secondary,
               fontFamily: 'Mulish-Reg',
               fontSize: 18,
-              fontWeight: FontWeight.w600),
+              fontWeight: FontWeight.w400),
         ),
-        backgroundColor: Constants.whiteColor,
         actions: [
           IconButton(
               onPressed: () => nextPage(
@@ -97,7 +106,7 @@ class _ChatPageState extends State<ChatPage> {
                   )),
               icon: Icon(
                 Icons.info_rounded,
-                color: Constants.greyColor,
+                color: Theme.of(context).colorScheme.tertiary,
               )),
         ],
       ),
@@ -115,7 +124,7 @@ class _ChatPageState extends State<ChatPage> {
             height: 56,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              color: Constants.whiteColor,
+              color: Theme.of(context).colorScheme.background,
               // color: Colors.red.shade200,
             ),
             child: Row(
@@ -126,7 +135,7 @@ class _ChatPageState extends State<ChatPage> {
                     width: 36,
                     child: Icon(
                       Icons.add,
-                      color: Constants.hintColor,
+                      color: Theme.of(context).colorScheme.tertiary,
                     )),
                 Expanded(
                   child: SizedBox(
@@ -145,7 +154,7 @@ class _ChatPageState extends State<ChatPage> {
                       textAlignVertical: TextAlignVertical.center,
                       scrollPhysics: const ClampingScrollPhysics(),
                       style: TextStyle(
-                        color: Constants.blackColor,
+                        color: Theme.of(context).colorScheme.secondary,
                         fontFamily: 'Mulish-Reg',
                         fontSize: 14,
                         height: 1.4,
@@ -153,7 +162,7 @@ class _ChatPageState extends State<ChatPage> {
                       decoration: InputDecoration(
                         filled: true,
                         // fillColor: Colors.yellow.shade200,
-                        fillColor: Constants.offWhiteColor,
+                        fillColor: Theme.of(context).colorScheme.surface,
                         contentPadding: const EdgeInsets.symmetric(
                             vertical: 4, horizontal: 5),
                         border: OutlineInputBorder(
@@ -169,12 +178,19 @@ class _ChatPageState extends State<ChatPage> {
                   child: (_message.isNotEmpty)
                       ? InkWell(
                           onTap: () => sendMessage(),
-                          child: SvgPicture.asset(
-                              height: 24, width: 24, 'assets/svg/ic_send.svg'),
+                          child: (_themeMode == 'Light')
+                              ? SvgPicture.asset(
+                                  height: 24,
+                                  width: 24,
+                                  'assets/svg/ic_send.svg')
+                              : SvgPicture.asset(
+                                  height: 24,
+                                  width: 24,
+                                  'assets/svg/ic_send_darkTheme.svg'),
                         )
                       : Icon(
                           Icons.mic,
-                          color: Constants.greyColor,
+                          color: Theme.of(context).colorScheme.tertiary,
                         ),
                 ),
               ],
@@ -197,7 +213,8 @@ class _ChatPageState extends State<ChatPage> {
                   itemCount: snapshot.data.docs.length,
                   itemBuilder: (context, index) {
                     return ChatCard(
-                        message: decryptString(snapshot.data.docs[index]['message']),
+                        message:
+                            decryptString(snapshot.data.docs[index]['message']),
                         sender: snapshot.data.docs[index]['sender'],
                         sendByMe: widget.userName ==
                             snapshot.data.docs[index]['sender'],

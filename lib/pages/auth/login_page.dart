@@ -27,9 +27,9 @@ class _LoginInPageState extends State<LoginInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constants.whiteColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body:_isLoading? Center(
-          child: CircularProgressIndicator(color: Constants.primaryLightColor)) : SingleChildScrollView(
+          child: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary)) : SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1, vertical: 60),
           child: Form(
@@ -42,9 +42,9 @@ class _LoginInPageState extends State<LoginInPage> {
                         'Login',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Constants.blackColor,
+                          color: Theme.of(context).colorScheme.secondary,
                           fontSize: 40,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w500,
                           fontFamily: 'Mulish-Reg',
                         ),
                       ),
@@ -60,7 +60,8 @@ class _LoginInPageState extends State<LoginInPage> {
                         return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                             .hasMatch(value!)?null :"Please enter a valid email";
                       },
-                      decoration: textInputDecoration.copyWith(
+                      style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                      decoration: input(context).copyWith(
                         labelText: 'Email',
                         prefixIcon: Icon(Icons.email_rounded, color: Constants.hintColor,),
                       ),
@@ -77,7 +78,8 @@ class _LoginInPageState extends State<LoginInPage> {
                       validator: (value){
                         return (value!.length >= 8) ?null :"The password must be at least of 8 character";
                       },
-                      decoration: textInputDecoration.copyWith(
+                      style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                      decoration: input(context).copyWith(
                         labelText: 'Password',
                         prefixIcon: Icon(Icons.key_rounded, color: Constants.hintColor,),
                         suffixIcon: IconButton(
@@ -101,7 +103,7 @@ class _LoginInPageState extends State<LoginInPage> {
                         width: MediaQuery.of(context).size.width * double.infinity ,
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         decoration: BoxDecoration(
-                          color: Constants.primaryLightColor,
+                          color: Theme.of(context).colorScheme.primary,
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child:Text(
@@ -122,7 +124,7 @@ class _LoginInPageState extends State<LoginInPage> {
                         Text(
                           'Don\'t have an account? ',
                           style: TextStyle(
-                            color: Constants.blackColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 14,
                             fontFamily: 'Mulish-Light',
                           ),
@@ -132,9 +134,9 @@ class _LoginInPageState extends State<LoginInPage> {
                           child: Text(
                             'Sign up here',
                             style: TextStyle(
-                              color: Constants.primaryLightColor,
+                              color: Theme.of(context).colorScheme.primary,
                               fontSize: 14,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w400,
                               fontFamily: 'Mulish-Reg',
                             ),
                           ),

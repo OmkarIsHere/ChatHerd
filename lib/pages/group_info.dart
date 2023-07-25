@@ -47,7 +47,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Constants.whiteColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: SingleChildScrollView(
                 physics: const ClampingScrollPhysics(),
                 child: Column(
@@ -62,7 +62,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                           child: Icon(
                             Icons.arrow_back_ios_new_rounded,
                             size: 20,
-                            color: Constants.blackColor,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                         ),
                       ),
@@ -71,7 +71,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                     Center(
                       child: CircleAvatar(
                         radius: 50,
-                        backgroundColor: Constants.primaryLightColor,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                         child: ((widget.groupIcon).isEmpty)
                             ? Image.asset('assets/images/user-group.png')
                             : Image.network(widget.groupIcon),
@@ -81,17 +81,17 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                     Text(
                       widget.groupName,
                       style: TextStyle(
-                          color: Constants.blackColor,
+                          color:Theme.of(context).colorScheme.secondary,
                           fontFamily: 'Mulish-Reg',
                           fontSize: 18,
-                          fontWeight: FontWeight.w600),
+                          fontWeight: FontWeight.w400),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),
                       child: Divider(
                         thickness: 2,
-                        color: Constants.dividerColor,
+                        color: Theme.of(context).dividerColor,
                       ),
                     ),
                     Padding(
@@ -101,10 +101,10 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                         child: Text(
                           '${participates ?? '0'} participate',
                           style: TextStyle(
-                              color: Constants.greyColor,
+                              color: Theme.of(context).colorScheme.tertiary,
                               fontFamily: 'Mulish-Reg',
                               fontSize: 12,
-                              fontWeight: FontWeight.w600),
+                              fontWeight: FontWeight.w400),
                         ),
                       ),
                     ),
@@ -115,7 +115,7 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
                       child: Divider(
                         height: 2,
                         thickness: 2,
-                        color: Constants.dividerColor,
+                        color: Theme.of(context).dividerColor,
                       ),
                     ),
                     Align(
@@ -164,22 +164,23 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.background,
             titlePadding:
                 const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             title: Text(
               'Exit Herd',
               style: TextStyle(
-                color: Constants.blackColor,
+                color: Theme.of(context).colorScheme.secondary,
                 fontSize: 16,
                 fontFamily: 'Mulish-Reg',
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w400,
               ),
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 15),
             content: Text(
               'Are you sure you want to exit?',
               style: TextStyle(
-                color: Constants.blackColor,
+                color: Theme.of(context).colorScheme.secondary,
                 fontSize: 14,
                 fontFamily: 'Mulish-Reg',
               ),

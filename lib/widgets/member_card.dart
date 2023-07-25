@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../services/database_services.dart';
-import '../shared/constants.dart';
 
 class MemberCard extends StatefulWidget {
   final String memberName;
@@ -29,6 +28,7 @@ getUserData()async {
       await DatabaseServices(uid: FirebaseAuth.instance.currentUser!.uid)
       .getUserProfilePic(getId(widget.memberName));
   if (snapshot.docs.isNotEmpty) {
+    if(!mounted)return;
     setState(() {
       email = snapshot.docs[0]['email'];
       profilePic = snapshot.docs[0]['profilePic'];
@@ -46,7 +46,7 @@ getUserData()async {
       // tileColor: Colors.red.shade200,
       leading: CircleAvatar(
         radius: 25,
-        backgroundColor: Constants.greyColor,
+        backgroundColor: Theme.of(context).dividerColor,
         child: (profilePic == '')
             ? Image.asset('assets/images/user.png')
             : Image.network(
@@ -80,7 +80,7 @@ getUserData()async {
           height: 1.4,
           overflow: TextOverflow.ellipsis,
           fontFamily: 'Mulish-Reg',
-          color: Constants.blackColor,
+          color: Theme.of(context).colorScheme.secondary,
         ),
       ),
       subtitle:  Text(
@@ -92,13 +92,13 @@ getUserData()async {
           height: 1.2,
           overflow: TextOverflow.ellipsis,
           fontFamily: 'Mulish-Reg',
-          color: Constants.greyColor,
+          color: Theme.of(context).colorScheme.tertiary,
         ),
       ),
       trailing:(widget.adminName == widget.memberName)
           ?Container(
         decoration: BoxDecoration(
-        color: Constants.offWhiteColor,
+        color: Theme.of(context).colorScheme.onSurface,
           borderRadius: BorderRadius.circular(5)
         ),
         child: Padding(
@@ -111,7 +111,7 @@ getUserData()async {
               fontSize: 12,
               height: 1.2,
               fontFamily: 'Mulish-Reg',
-              color: Constants.primaryLightColor,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
         ),

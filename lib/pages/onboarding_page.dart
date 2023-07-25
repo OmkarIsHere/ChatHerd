@@ -1,7 +1,9 @@
 import 'package:chat_herd/pages/auth/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/theme_changer.dart';
 import '../shared/constants.dart';
 import '../widgets/widgets.dart';
 
@@ -13,22 +15,13 @@ class OnBoarding extends StatefulWidget {
 }
 
 class _OnBoardingState extends State<OnBoarding> {
-  // bool _isSignedIn = false;
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getUserLoggedInState();
-  // }
-  // void getUserLoggedInState() async{
-  //   await HelperFunction.getUserLoggedInState().then((value) {
-  //     if(value!=null){
-  //       _isSignedIn = value;
-  //     }
-  //   });
-  // }
+      String _themeMode = 'Light';
   @override
   Widget build(BuildContext context) {
+    final theme = Provider.of<ThemeChanger>(context);
+    setState(() =>_themeMode = theme.getTheme);
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Column(
@@ -37,7 +30,9 @@ class _OnBoardingState extends State<OnBoarding> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.3,
               child: Center(
-                child: SvgPicture.asset('assets/svg/img_group_light.svg'),
+                child:(_themeMode == 'Light')
+                    ?SvgPicture.asset('assets/svg/img_group_light.svg')
+                    :SvgPicture.asset('assets/svg/img_group_dark.svg'),
               ),
             ),
             Center(
@@ -49,9 +44,9 @@ class _OnBoardingState extends State<OnBoarding> {
                   'Connect easily with your community and friends over countries',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Constants.blackColor,//Color(0xFF0F1828),
+                    color: Theme.of(context).colorScheme.secondary,//Color(0xFF0F1828),
                     fontSize: 24,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w500,
                     fontFamily: 'Mulish-Reg',
                   ),
                 ),
@@ -64,7 +59,7 @@ class _OnBoardingState extends State<OnBoarding> {
                     'Terms & Privacy Policy',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Constants.blackColor,
+                      color: Theme.of(context).colorScheme.secondary,
                       fontSize: 14,
                       height: 1.5,
                       fontFamily: 'Mulish-light',
@@ -78,7 +73,7 @@ class _OnBoardingState extends State<OnBoarding> {
                       width: MediaQuery.of(context).size.width * 0.9,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
-                        color: Constants.primaryLightColor,
+                        color: Theme.of(context).colorScheme.primary,
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child:Text(

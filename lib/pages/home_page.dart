@@ -5,7 +5,6 @@ import 'package:chat_herd/widgets/group_card.dart';
 import 'package:chat_herd/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../shared/constants.dart';
 
 class HomePage extends StatefulWidget {
@@ -54,7 +53,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Constants.whiteColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -70,14 +69,13 @@ class _HomePageState extends State<HomePage> {
                         fontSize: 18,
                         height: 1.5,
                         fontFamily: 'Mulish-Reg',
-                        fontWeight: FontWeight.w600,
-                        color: Constants.blackColor,
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                     InkWell(
                         onTap: () => popUpDialog(context),
-                        child:
-                            SvgPicture.asset('assets/svg/ic_plus_black.svg')),
+                        child:Icon(Icons.add, color: Theme.of(context).colorScheme.secondary)),
                   ],
                 ),
               ),
@@ -92,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                     width: double.maxFinite,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: Constants.offWhiteColor,
+                      color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Padding(
@@ -170,7 +168,7 @@ class _HomePageState extends State<HomePage> {
               overflow: TextOverflow.ellipsis,
               fontSize: 14,
               fontFamily: 'Mulish-Reg',
-              color: Constants.blackColor,
+              color: Theme.of(context).colorScheme.secondary,
             ),
           ),
         ],
@@ -185,8 +183,8 @@ class _HomePageState extends State<HomePage> {
         builder: (context) {
           return StatefulBuilder(builder: ((context, setState) {
             return AlertDialog(
-              title: const Text('Create a new herd', textAlign: TextAlign.start),
-              backgroundColor: Constants.whiteColor,
+              title: Text('Create a new herd', textAlign: TextAlign.start,style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
+              backgroundColor: Theme.of(context).colorScheme.background,
               content: Form(
                 key: formKey,
                 child: Column(
@@ -195,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                     _isLoading
                         ? Center(
                             child: CircularProgressIndicator(
-                                color: Constants.primaryLightColor))
+                                color: Theme.of(context).colorScheme.primary))
                         : SizedBox(
                             height: 60,
                             width: 60,
@@ -203,7 +201,7 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: Constants.offWhiteColor,
+                                    color: Theme.of(context).colorScheme.surface,
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   child: Image.asset('assets/images/user.png'),
@@ -211,12 +209,13 @@ class _HomePageState extends State<HomePage> {
                                 Align(
                                   alignment: Alignment.bottomRight,
                                   child: Container(
+                                    height: 24,
+                                      width: 24,
                                       decoration: BoxDecoration(
-                                        color: Constants.whiteColor,
+                                        color: Theme.of(context).colorScheme.surface,
                                         borderRadius: BorderRadius.circular(50),
                                       ),
-                                      child: SvgPicture.asset(
-                                          'assets/svg/ic_plus_black.svg')),
+                                      child: Icon(Icons.add, color: Theme.of(context).colorScheme.secondary)),
                                 )
                               ],
                             ),
@@ -230,7 +229,8 @@ class _HomePageState extends State<HomePage> {
                           groupName = value.trim();
                         });
                       },
-                      decoration: textInputDecoration.copyWith(
+                      style:TextStyle(color: Theme.of(context).colorScheme.secondary),
+                      decoration: input(context).copyWith(
                         labelText: 'Herd Name',
                         prefixIcon: Icon(
                           Icons.groups,
@@ -252,7 +252,7 @@ class _HomePageState extends State<HomePage> {
                             double.maxFinite,
                         padding: const EdgeInsets.symmetric(vertical: 9),
                         decoration: BoxDecoration(
-                          color: Constants.primaryLightColor,
+                          color: Theme.of(context).colorScheme.primary,
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: Text(

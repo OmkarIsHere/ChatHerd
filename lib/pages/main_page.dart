@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../shared/constants.dart';
+import 'package:provider/provider.dart';
+import '../helper/helper_function.dart';
+import '../providers/theme_changer.dart';
 import 'contacts_page.dart';
 import 'home_page.dart';
 import 'more_page.dart';
@@ -16,12 +17,28 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int selectedIndex = 1;
   var pages = [const ContactPage(), const HomePage(), const MorePage()];
+  String _themeMode = 'Light';
+
+  @override
+  void initState() {
+    super.initState();
+    getThemeMode();
+  }
+
+  void getThemeMode()  {
+     HelperFunction.getThemeMode().then((value) => {
+          if (value != null) {setState(() => _themeMode = value)}
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Provider.of<ThemeChanger>(context);
+    setState(() =>_themeMode = theme.getTheme);
     return Scaffold(
-      backgroundColor: Constants.whiteColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).colorScheme.background,
         elevation: 1,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -31,9 +48,12 @@ class _MainPageState extends State<MainPage> {
                       width: 8.0,
                       height: 8.0,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: Constants.blackColor),
+                          shape: BoxShape.circle,
+                          color: Theme.of(context).colorScheme.secondary),
                     )
-                  : SvgPicture.asset('assets/svg/ic_user_group.svg'),
+                  : (_themeMode == 'Light')
+                      ? SvgPicture.asset('assets/svg/ic_user_group.svg')
+                      : SvgPicture.asset('assets/svg/ic_user_group_white.svg'),
               label: 'Contacts'),
           BottomNavigationBarItem(
               icon: (selectedIndex == 1)
@@ -42,9 +62,12 @@ class _MainPageState extends State<MainPage> {
                       width: 8.0,
                       height: 8.0,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: Constants.blackColor),
+                          shape: BoxShape.circle,
+                          color: Theme.of(context).colorScheme.secondary),
                     )
-                  : SvgPicture.asset('assets/svg/ic_nav_chats.svg'),
+                  : (_themeMode == 'Light')
+                      ? SvgPicture.asset('assets/svg/ic_nav_chats.svg')
+                      : SvgPicture.asset('assets/svg/ic_nav_chats_white.svg'),
               label: 'Chats'),
           BottomNavigationBarItem(
               icon: (selectedIndex == 2)
@@ -53,22 +76,27 @@ class _MainPageState extends State<MainPage> {
                       width: 8.0,
                       height: 8.0,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: Constants.blackColor),
+                          shape: BoxShape.circle,
+                          color: Theme.of(context).colorScheme.secondary),
                     )
-                  : SvgPicture.asset('assets/svg/ic_more.svg'),
+                  : (_themeMode == 'Light')
+                      ? SvgPicture.asset('assets/svg/ic_more.svg')
+                      : SvgPicture.asset('assets/svg/ic_more_white.svg'),
               label: 'More'),
         ],
         currentIndex: selectedIndex,
         onTap: (index) => _onItemTapped(index),
         selectedFontSize: 18,
         unselectedFontSize: 14,
-        fixedColor: Constants.blackColor,
-        unselectedLabelStyle: TextStyle(color: Constants.blackColor),
-        selectedLabelStyle: TextStyle(color: Constants.blackColor),
+        fixedColor: Theme.of(context).colorScheme.secondary,
+        unselectedLabelStyle:
+            TextStyle(color: Theme.of(context).colorScheme.secondary),
+        selectedLabelStyle:
+            TextStyle(color: Theme.of(context).colorScheme.secondary),
         showUnselectedLabels: false,
         showSelectedLabels: true,
       ),
-      body: IndexedStack(index: selectedIndex,children: pages),
+      body: IndexedStack(index: selectedIndex, children: pages),
     );
   }
 

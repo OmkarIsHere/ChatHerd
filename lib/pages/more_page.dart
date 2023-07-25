@@ -8,7 +8,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/theme_changer.dart';
 import '../shared/constants.dart';
 
 class MorePage extends StatefulWidget {
@@ -23,19 +25,36 @@ class _MorePageState extends State<MorePage> {
   String emailAddress = 'null';
   String profilePic = '';
   AuthServices authServices = AuthServices();
+  bool _isDarkMode = false;
 
   @override
   void initState() {
     super.initState();
     getUserData();
     getProfilePic();
-
+    getThemeMode();
   }
+
   getUserData() {
     HelperFunction.getUserNameSF()
         .then((value) => setState(() => fullName = value!));
     HelperFunction.getUserEmailSF()
         .then((value) => setState(() => emailAddress = value!));
+  }
+
+  getThemeMode() async {
+    await HelperFunction.getThemeMode().then((value){
+          if (value != null){
+                (value == 'Dark') ? _isDarkMode = true : _isDarkMode = false;
+            }
+        });
+  }
+
+  void toggle(bool val) {
+    setState(() {
+      _isDarkMode = val;
+      getThemeMode();
+    });
   }
 
   getProfilePic() async {
@@ -71,22 +90,23 @@ class _MorePageState extends State<MorePage> {
         context: context,
         builder: (context) {
           return AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.background,
             titlePadding:
                 const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             title: Text(
               'Logout',
               style: TextStyle(
-                color: Constants.blackColor,
+                color: Theme.of(context).colorScheme.secondary,
                 fontSize: 16,
                 fontFamily: 'Mulish-Reg',
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w400,
               ),
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 15),
             content: Text(
               'Are you sure you want to logout?',
               style: TextStyle(
-                color: Constants.blackColor,
+                color: Theme.of(context).colorScheme.secondary,
                 fontSize: 14,
                 fontFamily: 'Mulish-Reg',
               ),
@@ -143,15 +163,16 @@ class _MorePageState extends State<MorePage> {
         context: context,
         builder: (context) {
           return AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.background,
             titlePadding:
                 const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             title: Text(
               'Select Avatar',
               style: TextStyle(
-                color: Constants.blackColor,
+                color: Theme.of(context).colorScheme.secondary,
                 fontSize: 16,
                 fontFamily: 'Mulish-Reg',
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w400,
               ),
             ),
             content: AspectRatio(
@@ -243,9 +264,10 @@ class _MorePageState extends State<MorePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Provider.of<ThemeChanger>(context);
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Constants.whiteColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -257,10 +279,10 @@ class _MorePageState extends State<MorePage> {
                     'More',
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                      color: Constants.blackColor,
+                      color: Theme.of(context).colorScheme.secondary,
                       fontSize: 18,
                       height: 1.5,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w400,
                       fontFamily: 'Mulish-Reg',
                     ),
                   ),
@@ -280,22 +302,27 @@ class _MorePageState extends State<MorePage> {
                           onTap: () => popUpAvatarDialog(context),
                           child: CircleAvatar(
                             radius: 25,
-                            backgroundColor: Constants.greyColor,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.tertiary,
                             child: (profilePic == '')
                                 ? Stack(
-                              children: [
-                                Image.asset('assets/images/user.png'),
-                                Positioned(
-                                    right: 0,
-                                    bottom: 0,
-                                    child: Container(
-                                        padding:const EdgeInsets.all(2),
-                                        decoration: BoxDecoration(
-                                          color: Constants.hintColor,
-                                          borderRadius: BorderRadius.circular(50),
-                                        ),
-                                        child: Icon(Icons.edit, color: Constants.blackColor,size: 12))),
-                              ],)
+                                    children: [
+                                      Image.asset('assets/images/user.png'),
+                                      Positioned(
+                                          right: 0,
+                                          bottom: 0,
+                                          child: Container(
+                                              padding: const EdgeInsets.all(2),
+                                              decoration: BoxDecoration(
+                                                color: Constants.hintColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                              ),
+                                              child: Icon(Icons.edit,
+                                                  color: Constants.blackColor,
+                                                  size: 12))),
+                                    ],
+                                  )
                                 : Stack(
                                     children: [
                                       Image.network(
@@ -304,7 +331,8 @@ class _MorePageState extends State<MorePage> {
                                         loadingBuilder: (BuildContext context,
                                             Widget child,
                                             ImageChunkEvent? loadingProgress) {
-                                          if (loadingProgress == null) return child;
+                                          if (loadingProgress == null)
+                                            return child;
                                           return Center(
                                             child: CircularProgressIndicator(
                                               value: loadingProgress
@@ -320,15 +348,18 @@ class _MorePageState extends State<MorePage> {
                                         },
                                       ),
                                       Positioned(
-                                        right: 0,
+                                          right: 0,
                                           bottom: 0,
                                           child: Container(
-                                            padding:const EdgeInsets.all(2),
-                                            decoration: BoxDecoration(
-                                              color: Constants.hintColor,
-                                              borderRadius: BorderRadius.circular(50),
-                                            ),
-                                              child: Icon(Icons.edit, color: Constants.blackColor,size: 12))),
+                                              padding: const EdgeInsets.all(2),
+                                              decoration: BoxDecoration(
+                                                color: Constants.hintColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                              ),
+                                              child: Icon(Icons.edit,
+                                                  color: Constants.blackColor,
+                                                  size: 12))),
                                     ],
                                   ),
                           ),
@@ -344,9 +375,10 @@ class _MorePageState extends State<MorePage> {
                                 fullName,
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  color: Constants.blackColor,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w300,
                                   fontFamily: 'Mulish-Reg',
                                 ),
                               ),
@@ -357,7 +389,7 @@ class _MorePageState extends State<MorePage> {
                                 emailAddress,
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  color: Constants.greyColor,
+                                  color: Theme.of(context).colorScheme.tertiary,
                                   fontSize: 13,
                                   fontFamily: 'Mulish-Reg',
                                 ),
@@ -385,14 +417,17 @@ class _MorePageState extends State<MorePage> {
                         SizedBox(
                           height: 24,
                           width: 24,
-                          child: SvgPicture.asset('assets/svg/ic_account.svg'),
+                          child: (_isDarkMode == false)
+                              ? SvgPicture.asset('assets/svg/ic_account.svg')
+                              : SvgPicture.asset(
+                                  'assets/svg/ic_account_white.svg'),
                         ),
                         const SizedBox(width: 10),
                         Text(
                           'Account',
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            color: Constants.blackColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 14,
                             fontFamily: 'Mulish-Reg',
                           ),
@@ -402,8 +437,10 @@ class _MorePageState extends State<MorePage> {
                     SizedBox(
                       height: 24,
                       width: 24,
-                      child:
-                          SvgPicture.asset('assets/svg/ic_forward_black.svg'),
+                      child: Icon(
+                          size: 14,
+                          Icons.arrow_forward_ios_rounded,
+                          color: Theme.of(context).colorScheme.secondary),
                     ),
                   ],
                 ),
@@ -422,14 +459,17 @@ class _MorePageState extends State<MorePage> {
                         SizedBox(
                           height: 24,
                           width: 24,
-                          child: SvgPicture.asset('assets/svg/ic_chats.svg'),
+                          child: (_isDarkMode == false)
+                              ? SvgPicture.asset('assets/svg/ic_chats.svg')
+                              : SvgPicture.asset(
+                                  'assets/svg/ic_chats_white.svg'),
                         ),
                         const SizedBox(width: 10),
                         Text(
                           'Chats',
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            color: Constants.blackColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 14,
                             fontFamily: 'Mulish-Reg',
                           ),
@@ -439,8 +479,10 @@ class _MorePageState extends State<MorePage> {
                     SizedBox(
                       height: 24,
                       width: 24,
-                      child:
-                          SvgPicture.asset('assets/svg/ic_forward_black.svg'),
+                      child: Icon(
+                          size: 14,
+                          Icons.arrow_forward_ios_rounded,
+                          color: Theme.of(context).colorScheme.secondary),
                     ),
                   ],
                 ),
@@ -451,7 +493,7 @@ class _MorePageState extends State<MorePage> {
                 child: Divider(
                   height: 2,
                   thickness: 1,
-                  color: Constants.dividerColor,
+                  color: Theme.of(context).dividerColor,
                 ),
               ),
               Padding(
@@ -468,15 +510,17 @@ class _MorePageState extends State<MorePage> {
                         SizedBox(
                           height: 24,
                           width: 24,
-                          child:
-                              SvgPicture.asset('assets/svg/ic_appearance.svg'),
+                          child: (_isDarkMode == false)
+                              ? SvgPicture.asset('assets/svg/ic_appearance.svg')
+                              : SvgPicture.asset(
+                                  'assets/svg/ic_appearance_white.svg'),
                         ),
                         const SizedBox(width: 10),
                         Text(
                           'Appearance',
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            color: Constants.blackColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 14,
                             fontFamily: 'Mulish-Reg',
                           ),
@@ -486,8 +530,18 @@ class _MorePageState extends State<MorePage> {
                     SizedBox(
                       height: 24,
                       width: 24,
-                      child:
-                          SvgPicture.asset('assets/svg/ic_forward_black.svg'),
+                      child: Switch(
+                          activeColor: Theme.of(context).colorScheme.primary,
+                          activeTrackColor: Colors.black,
+                          value: _isDarkMode,
+                          onChanged: (value) {
+                            if (value == true) {
+                              theme.setTheme('Dark');
+                            } else {
+                              theme.setTheme('Light');
+                            }
+                            toggle(value);
+                          }),
                     ),
                   ],
                 ),
@@ -506,15 +560,18 @@ class _MorePageState extends State<MorePage> {
                         SizedBox(
                           height: 24,
                           width: 24,
-                          child: SvgPicture.asset(
-                              'assets/svg/ic_notification.svg'),
+                          child: (_isDarkMode == false)
+                              ? SvgPicture.asset(
+                                  'assets/svg/ic_notification.svg')
+                              : SvgPicture.asset(
+                                  'assets/svg/ic_notification_white.svg'),
                         ),
                         const SizedBox(width: 10),
                         Text(
                           'Notification',
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            color: Constants.blackColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 14,
                             fontFamily: 'Mulish-Reg',
                           ),
@@ -524,8 +581,10 @@ class _MorePageState extends State<MorePage> {
                     SizedBox(
                       height: 24,
                       width: 24,
-                      child:
-                          SvgPicture.asset('assets/svg/ic_forward_black.svg'),
+                      child: Icon(
+                          size: 14,
+                          Icons.arrow_forward_ios_rounded,
+                          color: Theme.of(context).colorScheme.secondary),
                     ),
                   ],
                 ),
@@ -544,14 +603,17 @@ class _MorePageState extends State<MorePage> {
                         SizedBox(
                           height: 24,
                           width: 24,
-                          child: SvgPicture.asset('assets/svg/ic_privacy.svg'),
+                          child: (_isDarkMode == false)
+                              ? SvgPicture.asset('assets/svg/ic_privacy.svg')
+                              : SvgPicture.asset(
+                                  'assets/svg/ic_privacy_white.svg'),
                         ),
                         const SizedBox(width: 10),
                         Text(
                           'Privacy',
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            color: Constants.blackColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 14,
                             fontFamily: 'Mulish-Reg',
                           ),
@@ -561,8 +623,10 @@ class _MorePageState extends State<MorePage> {
                     SizedBox(
                       height: 24,
                       width: 24,
-                      child:
-                          SvgPicture.asset('assets/svg/ic_forward_black.svg'),
+                      child: Icon(
+                          size: 14,
+                          Icons.arrow_forward_ios_rounded,
+                          color: Theme.of(context).colorScheme.secondary),
                     ),
                   ],
                 ),
@@ -581,15 +645,17 @@ class _MorePageState extends State<MorePage> {
                         SizedBox(
                           height: 24,
                           width: 24,
-                          child:
-                              SvgPicture.asset('assets/svg/ic_data-usage.svg'),
+                          child: (_isDarkMode == false)
+                              ? SvgPicture.asset('assets/svg/ic_data-usage.svg')
+                              : SvgPicture.asset(
+                                  'assets/svg/ic_data-usage_white.svg'),
                         ),
                         const SizedBox(width: 10),
                         Text(
                           'Data Usage',
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            color: Constants.blackColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 14,
                             fontFamily: 'Mulish-Reg',
                           ),
@@ -599,8 +665,10 @@ class _MorePageState extends State<MorePage> {
                     SizedBox(
                       height: 24,
                       width: 24,
-                      child:
-                          SvgPicture.asset('assets/svg/ic_forward_black.svg'),
+                      child: Icon(
+                          size: 14,
+                          Icons.arrow_forward_ios_rounded,
+                          color: Theme.of(context).colorScheme.secondary),
                     ),
                   ],
                 ),
@@ -611,7 +679,7 @@ class _MorePageState extends State<MorePage> {
                 child: Divider(
                   height: 2,
                   thickness: 1,
-                  color: Constants.dividerColor,
+                  color: Theme.of(context).dividerColor,
                 ),
               ),
               Padding(
@@ -628,14 +696,17 @@ class _MorePageState extends State<MorePage> {
                         SizedBox(
                           height: 24,
                           width: 24,
-                          child: SvgPicture.asset('assets/svg/ic_help.svg'),
+                          child: (_isDarkMode == false)
+                              ? SvgPicture.asset('assets/svg/ic_help.svg')
+                              : SvgPicture.asset(
+                                  'assets/svg/ic_help_white.svg'),
                         ),
                         const SizedBox(width: 10),
                         Text(
                           'Help',
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            color: Constants.blackColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 14,
                             fontFamily: 'Mulish-Reg',
                           ),
@@ -645,8 +716,10 @@ class _MorePageState extends State<MorePage> {
                     SizedBox(
                       height: 24,
                       width: 24,
-                      child:
-                          SvgPicture.asset('assets/svg/ic_forward_black.svg'),
+                      child: Icon(
+                          size: 14,
+                          Icons.arrow_forward_ios_rounded,
+                          color: Theme.of(context).colorScheme.secondary),
                     ),
                   ],
                 ),
@@ -665,14 +738,17 @@ class _MorePageState extends State<MorePage> {
                         SizedBox(
                           height: 24,
                           width: 24,
-                          child: SvgPicture.asset('assets/svg/ic_invite.svg'),
+                          child: (_isDarkMode == false)
+                              ? SvgPicture.asset('assets/svg/ic_invite.svg')
+                              : SvgPicture.asset(
+                                  'assets/svg/ic_invite_white.svg'),
                         ),
                         const SizedBox(width: 10),
                         Text(
                           'Invite your friend',
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            color: Constants.blackColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 14,
                             fontFamily: 'Mulish-Reg',
                           ),
@@ -682,8 +758,10 @@ class _MorePageState extends State<MorePage> {
                     SizedBox(
                       height: 24,
                       width: 24,
-                      child:
-                          SvgPicture.asset('assets/svg/ic_forward_black.svg'),
+                      child: Icon(
+                          size: 14,
+                          Icons.arrow_forward_ios_rounded,
+                          color: Theme.of(context).colorScheme.secondary),
                     ),
                   ],
                 ),
@@ -694,7 +772,7 @@ class _MorePageState extends State<MorePage> {
                 child: Divider(
                   height: 2,
                   thickness: 1,
-                  color: Constants.dividerColor,
+                  color: Theme.of(context).dividerColor,
                 ),
               ),
               Padding(
@@ -713,15 +791,15 @@ class _MorePageState extends State<MorePage> {
                           SizedBox(
                             height: 24,
                             width: 24,
-                            child:
-                                Icon(Icons.logout, color: Constants.blackColor),
+                            child: Icon(Icons.logout,
+                                color: Theme.of(context).colorScheme.secondary),
                           ),
                           const SizedBox(width: 10),
                           Text(
                             'Logout',
                             textAlign: TextAlign.start,
                             style: TextStyle(
-                              color: Constants.blackColor,
+                              color: Theme.of(context).colorScheme.secondary,
                               fontSize: 14,
                               fontFamily: 'Mulish-Reg',
                             ),
@@ -731,8 +809,11 @@ class _MorePageState extends State<MorePage> {
                       SizedBox(
                         height: 24,
                         width: 24,
-                        child:
-                            SvgPicture.asset('assets/svg/ic_forward_black.svg'),
+                        child: Icon(
+                          size: 14,
+                          Icons.arrow_forward_ios_rounded,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
                       ),
                     ],
                   ),

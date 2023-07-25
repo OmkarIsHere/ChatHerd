@@ -1,5 +1,4 @@
 import 'package:chat_herd/pages/chat_page.dart';
-import 'package:chat_herd/shared/constants.dart';
 import 'package:chat_herd/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -75,7 +74,7 @@ class _GroupCardState extends State<GroupCard> {
               children: <Widget>[
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Constants.dividerColor,
+                  backgroundColor: Theme.of(context).dividerColor,
                   child: Image.asset(
                     'assets/images/user-group.png',
                     fit: BoxFit.contain,
@@ -93,9 +92,10 @@ class _GroupCardState extends State<GroupCard> {
                       style: TextStyle(
                         fontSize: 14,
                         height: 1.3,
+                        fontWeight: FontWeight.w400,
                         overflow: TextOverflow.ellipsis,
                         fontFamily: 'Mulish-Reg',
-                        color: Constants.blackColor,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -112,7 +112,7 @@ class _GroupCardState extends State<GroupCard> {
                           height: 1.1,
                           overflow: TextOverflow.ellipsis,
                           fontFamily: 'Mulish-Reg',
-                          color: Colors.grey.shade700,
+                          color: Theme.of(context).colorScheme.tertiary,
                         ),
                       ),
                     ),
@@ -125,7 +125,7 @@ class _GroupCardState extends State<GroupCard> {
           Divider(
             height: 2,
             thickness: 1,
-            color: Constants.offWhiteColor,
+            color: Theme.of(context).dividerColor,
           )
         ],
       ),

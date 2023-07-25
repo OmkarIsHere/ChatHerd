@@ -25,6 +25,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
         body: _isLoading
             ? Center(
                 child: CircularProgressIndicator(
@@ -43,9 +44,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           'Sign up',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Constants.blackColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             fontSize: 40,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w500,
                             fontFamily: 'Mulish-Reg',
                           ),
                         ),
@@ -57,7 +58,8 @@ class _SignUpPageState extends State<SignUpPage> {
                               fullName = value;
                             });
                           },
-                          decoration: textInputDecoration.copyWith(
+                          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                          decoration: input(context).copyWith(
                             labelText: 'Full Name',
                             prefixIcon: Icon(
                               Icons.person_rounded,
@@ -85,7 +87,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ? null
                                 : "Please enter a valid email";
                           },
-                          decoration: textInputDecoration.copyWith(
+                          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                          decoration: input(context).copyWith(
                             labelText: 'Email',
                             prefixIcon: Icon(
                               Icons.email_rounded,
@@ -109,7 +112,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ? null
                                 : "Minimum 8 and maximum 16 characters,\nAt least one uppercase letter,\nOne lowercase letter,\nOne number and one special character:";
                           },
-                          decoration: textInputDecoration.copyWith(
+                          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                          decoration: input(context).copyWith(
                             labelText: 'Password',
                             prefixIcon: Icon(
                               Icons.key_rounded,
@@ -139,7 +143,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ? null
                                 : "Both password should be same";
                           },
-                          decoration: textInputDecoration.copyWith(
+                          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                          decoration: input(context).copyWith(
                             labelText: 'Confirm Password',
                             prefixIcon: Icon(
                               Icons.key_rounded,
@@ -177,7 +182,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             Text(
                               'Already have an account? ',
                               style: TextStyle(
-                                color: Constants.blackColor,
+                                color: Theme.of(context).colorScheme.secondary,
                                 fontSize: 14,
                                 fontFamily: 'Mulish-Light',
                               ),
@@ -188,9 +193,9 @@ class _SignUpPageState extends State<SignUpPage> {
                               child: Text(
                                 'Login here',
                                 style: TextStyle(
-                                  color: Constants.primaryLightColor,
+                                  color: Theme.of(context).colorScheme.primary,
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w400,
                                   fontFamily: 'Mulish-Reg',
                                 ),
                               ),

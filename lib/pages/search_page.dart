@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../helper/helper_function.dart';
-import '../shared/constants.dart';
 import '../widgets/widgets.dart';
 import 'chat_page.dart';
 
@@ -42,34 +41,31 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Constants.whiteColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
-          backgroundColor: Constants.whiteColor,
+          backgroundColor: Theme.of(context).colorScheme.background,
           elevation: 2,
+          shadowColor: Theme.of(context).dividerColor,
           leading: InkWell(
             onTap: () => Navigator.pop(context),
             child: Icon(
               Icons.arrow_back_ios_new_rounded,
               size: 24,
-              color: Constants.blackColor,
+              color: Theme.of(context).colorScheme.secondary,
             ),
           ),
           title: SizedBox(
             height: 36,
             child: TextField(
-              //  onChanged: (value){
-              //   setState(() {
-              //     search = value.trim();
-              //   });
-              // },
               controller: searchController,
               keyboardType: TextInputType.text,
               autofocus: true,
               showCursor: true,
               maxLines: 1,
               textAlignVertical: TextAlignVertical.center,
+              cursorColor: Theme.of(context).colorScheme.tertiary,
               style: TextStyle(
-                color: Constants.blackColor,
+                color: Theme.of(context).colorScheme.secondary,
                 fontFamily: 'Mulish-Reg',
                 fontSize: 14,
                 height: 1.2,
@@ -77,8 +73,9 @@ class _SearchPageState extends State<SearchPage> {
               decoration: InputDecoration(
                 filled: true,
                 // fillColor: Colors.yellow.shade200,
-                fillColor: Constants.offWhiteColor,
+                fillColor: Theme.of(context).colorScheme.surface,
                 hintText: 'Search group here',
+                hintStyle: TextStyle(color: Theme.of(context).colorScheme.tertiary),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 5),
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,
@@ -95,7 +92,7 @@ class _SearchPageState extends State<SearchPage> {
                 child: Icon(
                   Icons.search_rounded,
                   size: 24,
-                  color: Constants.blackColor,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
             ),
@@ -155,13 +152,13 @@ class _SearchPageState extends State<SearchPage> {
                         height: 1.4,
                         overflow: TextOverflow.ellipsis,
                         fontFamily: 'Mulish-Reg',
-                        color: Constants.blackColor,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                   )
             : Center(
                 child: CircularProgressIndicator(
-                    color: Constants.primaryLightColor, strokeWidth: 2))
+                    color: Theme.of(context).colorScheme.primary, strokeWidth: 2))
         : const SizedBox();
   }
 
@@ -171,7 +168,7 @@ class _SearchPageState extends State<SearchPage> {
     return ListTile(
       leading: CircleAvatar(
         radius: 20,
-        backgroundColor: Constants.dividerColor,
+        backgroundColor: Theme.of(context).dividerColor,
         child: (groupIcon.isEmpty)
             ? Image.asset('assets/images/user-group.png', fit: BoxFit.cover)
             : Image.network(groupIcon, fit: BoxFit.cover),
@@ -183,9 +180,10 @@ class _SearchPageState extends State<SearchPage> {
         style: TextStyle(
           fontSize: 14,
           height: 1.4,
+          fontWeight: FontWeight.w400,
           overflow: TextOverflow.ellipsis,
           fontFamily: 'Mulish-Reg',
-          color: Constants.blackColor,
+          color: Theme.of(context).colorScheme.secondary,
         ),
       ),
       subtitle: Text(
@@ -197,7 +195,7 @@ class _SearchPageState extends State<SearchPage> {
           height: 1.2,
           overflow: TextOverflow.ellipsis,
           fontFamily: 'Mulish-Reg',
-          color: Constants.greyColor,
+          color: Theme.of(context).colorScheme.tertiary,
         ),
       ),
       trailing: (_isJoining == false)
@@ -218,9 +216,9 @@ class _SearchPageState extends State<SearchPage> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        color: Constants.offWhiteColor,
+                        color: Theme.of(context).colorScheme.surface,
                         border: Border.all(
-                            color: Constants.primaryLightColor, width: 1),
+                            color: Theme.of(context).colorScheme.primary, width: 1),
                         borderRadius: BorderRadius.circular(5)),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -232,7 +230,7 @@ class _SearchPageState extends State<SearchPage> {
                           fontSize: 14,
                           height: 1.2,
                           fontFamily: 'Mulish-Reg',
-                          color: Constants.primaryLightColor,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                     ),
@@ -245,7 +243,7 @@ class _SearchPageState extends State<SearchPage> {
                     style: TextStyle(
                       fontSize: 14,
                       fontFamily: 'Mulish-Reg',
-                      color: Constants.primaryLightColor,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 )
@@ -253,7 +251,7 @@ class _SearchPageState extends State<SearchPage> {
               width: 20,
               height: 20,
               child: CircularProgressIndicator(
-                  color: Constants.primaryLightColor, strokeWidth: 2)),
+                  color: Theme.of(context).colorScheme.primary, strokeWidth: 2)),
     );
   }
 

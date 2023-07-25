@@ -29,7 +29,7 @@ class _ChatCardState extends State<ChatCard> {
               minWidth:MediaQuery.of(context).size.width*0.3,
               maxWidth: MediaQuery.of(context).size.width*0.8),
           decoration: BoxDecoration(
-          color: (widget.sendByMe)?Constants.primaryLightColor:Constants.whiteColor,
+          color: (widget.sendByMe)?Theme.of(context).colorScheme.primary:Theme.of(context).colorScheme.background,
             borderRadius: (widget.sendByMe)?const BorderRadius.only(topLeft: Radius.circular(15), topRight:  Radius.circular(15), bottomLeft:  Radius.circular(15))
             :const BorderRadius.only(bottomRight: Radius.circular(15), topRight:  Radius.circular(15), bottomLeft:  Radius.circular(15)),
           ),
@@ -48,10 +48,9 @@ class _ChatCardState extends State<ChatCard> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: Constants.primaryLightColor,
+                    color:Theme.of(context).colorScheme.primary,
                     fontSize: 12,
                     height: 1.5,
-                    fontWeight: FontWeight.w600,
                     fontFamily: 'Mulish-Reg',
                   ),
                 ),
@@ -63,12 +62,12 @@ class _ChatCardState extends State<ChatCard> {
                   maxLines: null,
                   overflow: TextOverflow.clip,
                   style: TextStyle(
-                    color:(widget.sendByMe)?Constants.whiteColor :Constants.blackColor,
+                    color:(widget.sendByMe)?Constants.whiteColor :Theme.of(context).colorScheme.secondary,
                     fontSize: 14,
                     fontFamily: 'Mulish-Reg',
                   ),
                 ),
-                const SizedBox(height: 2),
+                // const SizedBox(height: 2),
                 Align(
                   alignment: Alignment.centerRight,
                   child: Text(
@@ -78,7 +77,7 @@ class _ChatCardState extends State<ChatCard> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color:(widget.sendByMe)?Constants.whiteColor :Constants.greyColor,
+                      color:(widget.sendByMe)?Constants.hintColor:Constants.greyColor,
                       fontSize: 10,
                       fontFamily: 'Mulish-Reg',
                     ),
