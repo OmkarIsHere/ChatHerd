@@ -48,7 +48,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool _signedIn = false;
-  // String _themeMode = 'Dark';
 
   @override
   void initState() {
@@ -65,14 +64,7 @@ class _MyAppState extends State<MyApp> {
               })
             }
         });
-    // HelperFunction.getThemeMode().then((value) => {
-    //   if (value != null)
-    //     {
-    //       setState(() {
-    //         _themeMode = value;
-    //       })
-    //     }
-    // });
+
   }
 
   @override

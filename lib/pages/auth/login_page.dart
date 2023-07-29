@@ -156,7 +156,6 @@ class _LoginInPageState extends State<LoginInPage> {
       setState(() {
         _isLoading = true;
       });
-      print('email: $email, password: $password');
       await authServices.loginUserWithEmailAndPassword(email, password)
           .then((value) async{
         if(value == true){
