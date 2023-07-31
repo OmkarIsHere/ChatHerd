@@ -2,7 +2,6 @@ import 'package:chat_herd/services/database_services.dart';
 import 'package:chat_herd/widgets/member_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../helper/helper_function.dart';
 import '../shared/constants.dart';
 import '../widgets/widgets.dart';
@@ -300,8 +299,8 @@ class _GroupInfoPageState extends State<GroupInfoPage> {
 
   @override
   void dispose() {
-    super.dispose();
     members;
     memberList();
+    super.dispose();
   }
 }

@@ -289,4 +289,11 @@ class _HomePageState extends State<HomePage> {
       showSnackBar(context, Colors.green, 'Herd created Successfully', 3);
     }
   }
+  @override
+  void dispose() {
+    groups;
+    groupsData;
+    groupList();
+    super.dispose();
+  }
 }

@@ -117,9 +117,7 @@ class _ChatPageState extends State<ChatPage> {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: messages(),
             ),
-          ), // Align(
-          //   alignment: Alignment.bottomCenter,
-          //   child:
+          ),
           Container(
             height: 56,
             width: MediaQuery.of(context).size.width,
@@ -196,7 +194,6 @@ class _ChatPageState extends State<ChatPage> {
               ],
             ),
           ),
-          // ),
         ],
       ),
     );
@@ -238,5 +235,11 @@ class _ChatPageState extends State<ChatPage> {
         _message = '';
       });
     }
+  }
+  @override
+  void dispose() {
+    chats;
+    messages();
+    super.dispose();
   }
 }
