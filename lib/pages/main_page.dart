@@ -23,6 +23,7 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     getThemeMode();
+
   }
 
   void getThemeMode()  {
@@ -105,4 +106,5 @@ class _MainPageState extends State<MainPage> {
       selectedIndex = index;
     });
   }
+
 }

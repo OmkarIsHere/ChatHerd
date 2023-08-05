@@ -43,13 +43,18 @@ void nextPageReplacement(context, page){
   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> page));
 }
 
-void showSnackBar(context, color, message, time){
+void showSnackBar(context, color, message, time,{bool onPressed=false, VoidCallback? voidCallback}){
+
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
         content: Text(message,style: TextStyle(fontSize: 14, color: Constants.whiteColor),),
         backgroundColor: color,
     duration:Duration(seconds: time),
-    action: SnackBarAction(label: 'Ok',textColor: color, backgroundColor: Constants.whiteColor, onPressed: (){}),
+    action: SnackBarAction(label: 'Ok',textColor: color, backgroundColor: Constants.whiteColor, onPressed: (){
+      if(onPressed){
+        voidCallback;
+      }
+    }),
     ),
   );
 }

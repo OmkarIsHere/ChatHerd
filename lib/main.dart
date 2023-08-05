@@ -60,22 +60,22 @@ class _MyAppState extends State<MyApp> {
   final myDarkTheme = SystemUiOverlayStyle.light.copyWith(
       systemNavigationBarColor: const Color(0xFF0F1828),
       statusBarColor: const Color(0xFF0F1828));
+
+
   @override
   void initState() {
     super.initState();
     getUserLoggedInStatus();
   }
 
-  getUserLoggedInStatus() {
-    HelperFunction.getUserLoggedInState().then((value) {
+  getUserLoggedInStatus() async{
+   await HelperFunction.getUserLoggedInState().then((value) {
       if (value != null) {
         setState(() {
           _signedIn = value;
         });
-
-        Future.delayed(
-            const Duration(seconds: 3), () => FlutterNativeSplash.remove());
       }
+      Future.delayed(const Duration(seconds: 3), () => FlutterNativeSplash.remove());
     });
   }
 
@@ -93,4 +93,6 @@ class _MyAppState extends State<MyApp> {
       home: _signedIn ? const MainPage() : const OnBoarding(),
     );
   }
+
+
 }

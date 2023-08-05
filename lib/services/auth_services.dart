@@ -24,12 +24,12 @@ class AuthServices {
     try {
       // User user = (await firebaseAuth.signInWithEmailAndPassword(email: email, password: password)).user!;
       UserCredential userCredential = await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);//).user!;
-      String idToken = await userCredential.user!.getIdToken();
+      String? idToken = await userCredential.user!.getIdToken();
       // print('user: $user');
       // print('usercredentials: $userCredential');
       // print('idToken: $idToken');
-      // if (idToken != null) {
-        if (idToken.isNotEmpty){
+      if (idToken!.isNotEmpty) {
+      //   if (user != null){
         return true;
       } else {
         return false;
