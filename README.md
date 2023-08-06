@@ -1,16 +1,99 @@
-# chat_herd
 
-A new Flutter project.
+# ChatHerd
+
+Welcome to ChatHerd! ChatHerd is a secure and feature-rich chat application built with Flutter that allows users to communicate in real time. With support for both dark and light themes, as well as message encryption, ChatHerd ensures a seamless and private chatting experience for everyone.
+
+
+## Demo
+
+will be added shortly....
+
+
+## Features
+
+- **Real-time Chat:** Experience seamless real-time messaging with friends and groups.
+
+- **Dark and Light Themes:** Customize your chat interface by switching between dark and light themes.
+
+- **End-to-End Encryption:** Messages are encrypted to ensure your conversations are private and secure.
+
+- **User-Friendly Interface:** The intuitive UI makes it easy for anyone to use and navigate the application.
+
+- **Emojis and Reactions:** Express yourself with a wide range of emojis and message reactions.
+
+- **Change Profile Pic:** Customize your profile picture according to your choice.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+To run ChatHerd, make sure you have the following software installed:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Flutter SDK** (with Dart)
+- **Android Studio / Xcode** (for Android/iOS development)
+- **Git** (optional, for version control)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Installation
+
+1. Clone the repository:
+
+```
+git clone https://github.com/OmkarIsHere/ChatHerd.git
+
+```
+
+
+2. Navigate to the project directory:
+```
+cd ChatHerd
+
+```
+
+3. Install the required dependencies:
+```
+flutter pub get
+
+```
+
+### Usage
+Run the application:
+```
+flutter run
+
+```
+
+1. Open the app on your emulator or connected device.
+
+2. Create an account or log in if you already have one.
+
+3. Start chatting with your friends or join public chat rooms to engage with other users.
+
+4. To change the theme, go to the app's more > appearance and select your preferred theme (dark/light).
+
+### Contributing
+
+We welcome contributions from the community to improve ChatHerd. If you want to contribute, please follow these steps:
+
+1. Fork the repository.
+
+2. Create a new branch for your feature or bug fix:
+```
+ git checkout -b feature/your-feature-name
+
+```
+
+3. Push your changes to your forked repository:
+```
+git push origin feature/your-feature-name
+
+```
+
+4. Open a pull request on the main repository.
+
+### Security
+We take user privacy and data security seriously. ChatHerd uses end-to-end encryption to protect your messages from unauthorized access.
+
+### Contact
+If you have any questions or suggestions regarding ChatHerd, feel free to contact us at pendkalkar.omkar786@gmail.com or open an issue in this repository.
+
+**Happy and secure chatting!**
