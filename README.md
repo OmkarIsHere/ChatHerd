@@ -3,10 +3,9 @@
 
 Welcome to ChatHerd! ChatHerd is a secure and feature-rich chat application built with Flutter that allows users to communicate in real time. With support for both dark and light themes, as well as message encryption, ChatHerd ensures a seamless and private chatting experience for everyone.
 
+**Download Apk -** https://drive.google.com/file/d/1NDDCqnoOr0o9RrKdTH06fI-CSDahonPQ/view?usp=sharing
 
-## Demo
-
-
+## Preview
 
 https://github.com/OmkarIsHere/ChatHerd/assets/101088359/b3b3ee1b-938a-4f7f-9ca8-fce35fa00d72
 
